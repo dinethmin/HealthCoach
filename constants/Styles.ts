@@ -1,21 +1,20 @@
-import {ColorPalette} from '@/constants/Colors';
-import { StyleSheet } from 'react-native';
+import { ColorPalette } from "@/constants/Colors";
+import { StyleSheet } from "react-native";
 
 export const defaultStyles = StyleSheet.create({
   btn: {
     height: 50,
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     paddingHorizontal: 10,
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(235, 36, 36, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   pageContainer: {
     flex: 1,

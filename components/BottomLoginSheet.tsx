@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 0,
+    height: '20%',
     width: '100%',
     backgroundColor: '#000',
     padding: 26,

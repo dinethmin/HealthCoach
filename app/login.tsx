@@ -1,29 +1,38 @@
-import { 
-  View, Text, StyleSheet, KeyboardAvoidingView, Platform, 
-  ActivityIndicator, TextInput, TouchableOpacity 
-} from 'react-native';
-import React, { useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
-import { defaultStyles } from '../constants/Styles';
-import { FIREBASE_AUTH } from '../FirebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { router } from 'expo-router';
+import {
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { defaultStyles } from "../constants/Styles";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { router } from "expo-router";
 
 export default function LoginScreen() {
   const { type } = useLocalSearchParams<{ type: string }>();
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const auth = FIREBASE_AUTH;
 
   const signIn = async () => {
     setLoading(true);
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      if (user) router.replace('/(tabs)');
+      if (user) router.replace("/(tabs)");
     } catch (error: any) {
       console.log(error);
-      alert('Sign in failed: ' + error.message);
+      alert("Sign in failed: " + error.message);
     }
     setLoading(false);
   };
@@ -32,17 +41,17 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      if (user) router.replace('/(tabs)');
+      if (user) router.replace("/(tabs)");
     } catch (error: any) {
       console.log(error);
-      alert('Sign up failed: ' + error.message);
+      alert("Sign up failed: " + error.message);
     }
     setLoading(false);
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
       keyboardVerticalOffset={1}
     >
@@ -53,7 +62,7 @@ export default function LoginScreen() {
       )}
 
       <Text style={styles.title}>
-        {type === 'login' ? 'Welcome back' : 'Create your account'}
+        {type === "login" ? "Welcome back" : "Create your account"}
       </Text>
 
       <View style={{ marginBottom: 20 }}>
@@ -74,12 +83,18 @@ export default function LoginScreen() {
         />
       </View>
 
-      {type === 'login' ? (
-        <TouchableOpacity onPress={signIn} style={[defaultStyles.btn, styles.btnPrimary]}>
+      {type === "login" ? (
+        <TouchableOpacity
+          onPress={signIn}
+          style={[defaultStyles.btn, styles.btnPrimary]}
+        >
           <Text style={styles.btnPrimaryText}>Login</Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity onPress={signUp} style={[defaultStyles.btn, styles.btnPrimary]}>
+        <TouchableOpacity
+          onPress={signUp}
+          style={[defaultStyles.btn, styles.btnPrimary]}
+        >
           <Text style={styles.btnPrimaryText}>Create account</Text>
         </TouchableOpacity>
       )}
@@ -94,24 +109,24 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    alignSelf: 'center',
-    fontWeight: 'bold',
+    alignSelf: "center",
+    fontWeight: "bold",
   },
   inputField: {
     marginVertical: 4,
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 12,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   btnPrimary: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     marginVertical: 4,
   },
   btnPrimaryText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });
