@@ -11,8 +11,6 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import { TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -30,7 +28,6 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -38,10 +35,13 @@ export default function RootLayout() {
     if (error) throw error;
   }, [error]);
 
-  useEffect(() => { 
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+  useEffect(() => {
+    const hideSplash = async () => {
+      if (loaded) {
+        await SplashScreen.hideAsync();
+      }
+    };
+    hideSplash();
   }, [loaded]);
 
   if (!loaded) {
@@ -53,27 +53,12 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="login"
-          options={{
-            presentation: "modal",
-            title: "",
-            headerTitleStyle: {
-              fontFamily: "mon-sb",
-            },
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <Ionicons name="close-outline" size={28} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
+        <Stack.Screen name="Pediction" options={{ headerShown: false }} />
+        <Stack.Screen name="Home" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
