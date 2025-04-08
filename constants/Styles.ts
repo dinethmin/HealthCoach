@@ -10,6 +10,13 @@ export const defaultStyles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 10,
   },
+  btns:{
+    height: 40,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
