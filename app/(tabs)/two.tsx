@@ -1,16 +1,26 @@
 import { Button, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { FIREBASE_Storage, ref, getDownloadURL } from '@/FirebaseConfig';
+import { FIREBASE_DB } from '@/FirebaseConfig';
+
+
+const fetchModelUrl = async (fileName: string | undefined) => {
+  const fileRef = ref(FIREBASE_Storage, fileName);
+  try {
+    const url = await getDownloadURL(fileRef);
+    console.log(`Download URL for ${fileName}: ${url}`);
+    return url;
+  } catch (error) {
+    console.error("Error fetching file URL:", error);
+  }
+};
 
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
-      {/* Account deletion required in IOS store */}
-      <Button title="Delete Account" onPress={() => FIREBASE_AUTH.currentUser?.delete()} />
+
     </View>
   );
 }
