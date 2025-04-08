@@ -10,39 +10,20 @@ import { defaultStyles } from "@/constants/Styles";
 import { ColorPalette } from "@/constants/Colors";
 import { Link } from "expo-router";
 import AnimatedIntro from "@/components/AnimatedIntro";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import BottomLoginSheet from "@/components/BottomLoginSheet";
 
 const Home = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-      <Link
-          href={{
-            pathname: "/Home",
-            params: {
-              type: "nav",
-            },
-          }}
-          asChild
-          style={[defaultStyles.btns, styles.btnDark]}
-        >
-          <TouchableOpacity>
-            <AntDesign
-              name="login"
-              size={20}
-              style={styles.btnIcon}
-              color={ColorPalette.light}
-            />
-            <Text style={styles.btnDarkText}>Login</Text>
-          </TouchableOpacity>
-        </Link>
+    <SafeAreaView style={{ flex: 1}}>
+      <View style={{ flex: 1, backgroundColor:'black' }}>
+        
         <AnimatedIntro />
         <BottomLoginSheet />
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

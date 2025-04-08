@@ -11,11 +11,13 @@ export const defaultStyles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   btns:{
-    height: 40,
+    height: 30,
+    width: '40%',
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    margin: 5,
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,

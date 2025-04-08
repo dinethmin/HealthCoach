@@ -16,7 +16,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 const Prediction = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1,  backgroundColor: 'black' }}>
         <AnimatedIntro />
         <Link
           href={{
@@ -26,7 +26,7 @@ const Prediction = () => {
             },
           }}
           asChild
-          style={[defaultStyles.btns, styles.btnDark]}
+          style={[defaultStyles.btn, styles.btnDark]}
         >
           <TouchableOpacity>
             <AntDesign
