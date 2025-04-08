@@ -1,16 +1,11 @@
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
 } from "react-native";
 import React from "react";
-import { defaultStyles } from "@/constants/Styles";
 import { ColorPalette } from "@/constants/Colors";
-import { Link } from "expo-router";
 import AnimatedIntro from "@/components/AnimatedIntro";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import BottomLoginSheet from "@/components/BottomLoginSheet";
 
 const Home = () => {
