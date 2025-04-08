@@ -20,7 +20,7 @@ export default function TabLayout() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsLoading(false);
       if (!user) {
-        router.replace("/Pediction");
+        router.replace("/Home");
       }
     });
 
