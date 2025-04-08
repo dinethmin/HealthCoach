@@ -6,10 +6,15 @@ from firebase_admin import storage
 import os
 import sys
 import json
+import firebase_admin
+from firebase_admin import credentials, storage
 
-# Initialize Firebase Admin SDK if not already initialized
+# Initialize Firebase Admin SDK with your credentials and specify the storage bucket
 if not firebase_admin._apps:
-    firebase_admin.initialize_app()
+    cred = credentials.ApplicationDefault() 
+    firebase_admin.initialize_app(cred, {
+        'storageBucket': 'health-coach-bbd44.firebasestorage.app' 
+    })
 
 # Download model from Firebase Storage
 def download_model(model_path, local_path):
