@@ -202,6 +202,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#fff",
   },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 4,
+  },
   btnPrimary: {
     backgroundColor: "#007bff",
     marginVertical: 4,
