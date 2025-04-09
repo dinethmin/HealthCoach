@@ -4,12 +4,31 @@ import joblib
 import firebase_admin
 from firebase_admin import storage
 import os
+from firebase_admin import credentials, initialize_app, storage
 
 app = Flask(__name__)
 
 # Initialize Firebase
 if not firebase_admin._apps:
-    firebase_admin.initialize_app()
+    cred = credentials.Certificate("healthcoach-64321-241714836832.json")
+    initialize_app(cred, {
+        'storageBucket': "healthcoach-64321.firebasestorage.app"
+    })
+
+def download_model(model_path, local_path):
+    bucket = storage.bucket()
+    blob = bucket.blob(model_path)
+    blob.download_to_filename(local_path)
+
+# Download models from Firebase Storage
+download_model('models/hybrid_model.pkl', '/tmp/hybrid_model.pkl')
+download_model('models/svc_model.pkl', '/tmp/svc_model.pkl')
+download_model('models/nb_model.pkl', '/tmp/nb_model.pkl')
+download_model('models/rf_model.pkl', '/tmp/rf_model.pkl')
+download_model('models/feature_names.pkl', '/tmp/feature_names.pkl')
+
+
+models = load_models()
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -20,19 +39,6 @@ def predict():
         if not user_symptoms:
             return jsonify({"error": "Symptoms are required."}), 400
 
-        # Download models from Firebase Storage
-        def download_model(model_path, local_path):
-            bucket = storage.bucket()
-            blob = bucket.blob(model_path)
-            blob.download_to_filename(local_path)
-
-        download_model('models/hybrid_model.pkl', '/tmp/hybrid_model.pkl')
-        download_model('models/svc_model.pkl', '/tmp/svc_model.pkl')
-        download_model('models/nb_model.pkl', '/tmp/nb_model.pkl')
-        download_model('models/rf_model.pkl', '/tmp/rf_model.pkl')
-        download_model('models/feature_names.pkl', '/tmp/feature_names.pkl')
-
-        models = load_models()
         predicted_disease, probabilities = predict_disease(user_symptoms, models)
 
         return jsonify({

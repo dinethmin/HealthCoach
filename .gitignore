@@ -34,3 +34,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+#keys
+healthcoach-64321-241714836832.json

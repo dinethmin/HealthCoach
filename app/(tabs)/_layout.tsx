@@ -27,7 +27,7 @@ export default function TabLayout() {
       }
     });
 
-    return () => unsubscribe(); // Cleanup listener on unmount
+    return () => unsubscribe();
   }, []);
 
   if (isLoading) {

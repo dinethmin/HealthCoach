@@ -57,7 +57,7 @@ export default function TabTwoScreen() {
     }
 
     try {
-      const response = await axios.post("https://cloud-run-flask-app-126871223994.us-central1.run.app/predict",
+      const response = await axios.post("https://predict-639459962024.us-central1.run.app/predict",
         { symptoms: selectedSymptoms.map(s => s.toLowerCase().replace(/\s+/g, "")) }
       );
       

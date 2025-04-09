@@ -14,13 +14,13 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDe4YpWd_VCTTuMFyZIz54vF30oDfRHz2M",
-  authDomain: "health-coach-bbd44.firebaseapp.com",
-  projectId: "health-coach-bbd44",
-  storageBucket: "health-coach-bbd44.firebasestorage.app",
-  messagingSenderId: "126871223994",
-  appId: "1:126871223994:web:a3d9c041222f14647c4c83",
-  measurementId: "G-X90GTXWK2R",
+  apiKey: "AIzaSyByiDdAhtwz39-SSPa73AhsfZq4YEOoAz8",
+  authDomain: "healthcoach-64321.firebaseapp.com",
+  projectId: "healthcoach-64321",
+  storageBucket: "healthcoach-64321.firebasestorage.app",
+  messagingSenderId: "639459962024",
+  appId: "1:639459962024:web:8a2135e7063a96ae4f269d",
+  measurementId: "G-Q8VRTYXE8E"
 };
 
 // Initialize Firebase
