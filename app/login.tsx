@@ -23,6 +23,11 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("");
+  const [city, setCity] = useState("");
   const auth = FIREBASE_AUTH;
 
   const signIn = async () => {
@@ -66,21 +71,96 @@ export default function LoginScreen() {
       </Text>
 
       <View style={{ marginBottom: 20 }}>
-        <TextInput
-          autoCapitalize="none"
-          placeholder="Email"
-          style={styles.inputField}
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          autoCapitalize="none"
-          placeholder="Password"
-          style={styles.inputField}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+        {type === "login" ? (
+          <>
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Email"
+              style={styles.inputField}
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Password"
+              style={styles.inputField}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </>
+        ) : (
+          <>
+            <TextInput
+              autoCapitalize="words"
+              placeholder="Name"
+              style={styles.inputField}
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Phone"
+              style={styles.inputField}
+              value={phone}
+              onChangeText={setPhone}
+              keyboardType="phone-pad"
+            />
+            {phone && !/^[0-9]{10}$/.test(phone) && (
+              <Text style={styles.errorText}>
+                Please enter a valid phone number format (10 digit).
+              </Text>
+            )}
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Birthday (MM/DD/YYYY)"
+              style={styles.inputField}
+              value={birthday}
+              onChangeText={setBirthday}
+            />
+            {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(birthday) && (
+              <Text style={styles.errorText}>
+                Please enter a valid date format.
+              </Text>
+            )}
+            <TextInput
+              autoCapitalize="words"
+              placeholder="Gender (Male, Female, Non-binary)"
+              style={styles.inputField}
+              value={gender}
+              onChangeText={setGender}
+            />
+            {gender &&
+              !["Male", "Female", "Non-binary", "Other"].includes(gender) && (
+                <Text style={styles.errorText}>
+                  Please enter a valid gender.
+                </Text>
+              )}
+            <TextInput
+              autoCapitalize="words"
+              placeholder="City"
+              style={styles.inputField}
+              value={city}
+              onChangeText={setCity}
+              secureTextEntry
+            />
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Email"
+              style={styles.inputField}
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              autoCapitalize="none"
+              placeholder="Password"
+              style={styles.inputField}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </>
+        )}
       </View>
 
       {type === "login" ? (
@@ -106,7 +186,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   title: {
     fontSize: 30,
