@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, router, Tabs } from "expo-router";
 import { Pressable, Text, ActivityIndicator, View } from "react-native";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+//ICONS
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Feather from '@expo/vector-icons/Feather';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -53,7 +56,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -73,15 +76,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
+          headerShown: false,
           title: "Prediction",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name="health-and-safety" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="Profile"
         options={{
+          headerShown: false,
           title: "Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="user" size={24} color={color} />,
         }}
       />
       
