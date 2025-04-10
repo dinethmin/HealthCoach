@@ -8,7 +8,7 @@ import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useColorScheme } from "@/components/useColorScheme";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -69,7 +69,7 @@ function RootLayoutNav() {
           },
           headerLeft: () => (
             <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="close-outline" size={28} color='white'/>
+              <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
           ),
         }}
