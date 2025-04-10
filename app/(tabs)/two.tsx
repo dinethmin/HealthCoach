@@ -87,7 +87,8 @@ export default function TabTwoScreen() {
         ))}
       </ScrollView>
 
-      <Button title="Clear All" onPress={handleClearSelection} />
+      <Button title="Cear All" onPress={handleClearSelection} />
+      <View style={styles.br} />
       <Button title="Get Prediction" onPress={handleGetPrediction} />
 
       {prediction && (
@@ -150,5 +151,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     color: "black",
+  },
+  br: {
+    height: 4,
+    backgroundColor: 'transparent',
   },
 });
