@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "@/components/Themed";
 import { Button, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
@@ -9,38 +9,42 @@ import { child, get, getDatabase, ref, remove } from "firebase/database";
 import { deleteUser } from "firebase/auth";
 
 const Profile = () => {
-
   const [userimage, setUrl] = React.useState("");
+  const [newImageUrl, setNewUrl] = useState("");
   const user = FIREBASE_AUTH.currentUser;
   const userId = FIREBASE_AUTH.currentUser?.uid;
 
   useEffect(() => {
-      fetchUserData();
-    }, []);
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    setNewUrl(userimage);
+  }, [newImageUrl]);
 
   const fetchUserData = async () => {
-      try {
-        const user = FIREBASE_AUTH.currentUser;
-        if (!user) {
-          console.warn("No user logged in");
-          return;
-        }
-  
-        const userId = FIREBASE_AUTH.currentUser?.uid;
-        const dbRef = ref(FIREBASE_Database);
-  
-        const snapshot = await get(child(dbRef, `users/${userId}`));
-        if (snapshot.exists()) {
-          const userData = snapshot.val();
-  
-          setUrl(userData.imageUrl || "");
-        } else {
-          console.log("No data available");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+    try {
+      const user = FIREBASE_AUTH.currentUser;
+      if (!user) {
+        console.warn("No user logged in");
+        return;
       }
-    };
+
+      const userId = FIREBASE_AUTH.currentUser?.uid;
+      const dbRef = ref(FIREBASE_Database);
+
+      const snapshot = await get(child(dbRef, `users/${userId}`));
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+
+        setUrl(userData.imageUrl || "");
+      } else {
+        console.log("No data available");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleDeleteAccount = async () => {
     if (user) {
@@ -48,10 +52,10 @@ const Profile = () => {
         // Delete user data
         const db = getDatabase();
         await remove(ref(db, `users/${userId}`));
-  
+
         // Delete user
         await deleteUser(user);
-  
+
         console.log("User account and data deleted.");
       } catch (error) {
         console.error("Error deleting account:", error);
@@ -68,7 +72,9 @@ const Profile = () => {
       <View style={styles.userCard}>
         <Image
           source={{
-            uri: userimage || "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Pic-Background.png",
+            uri:
+              userimage ||
+              "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Pic-Background.png",
           }}
           style={styles.profileImage}
         />
@@ -98,10 +104,7 @@ const Profile = () => {
       </View>
       <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
 
-      <Button
-        title="Delete Account"
-        onPress={handleDeleteAccount}
-      />
+      <Button title="Delete Account" onPress={handleDeleteAccount} />
     </SafeAreaView>
   );
 };
