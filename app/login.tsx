@@ -32,6 +32,7 @@ export default function LoginScreen() {
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
   const auth = FIREBASE_AUTH;
+  const imageUrl = "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Photo-Image.png";
 
   const signIn = async () => {
     setLoading(true);
@@ -78,6 +79,7 @@ export default function LoginScreen() {
       gender,
       city,
       email,
+      imageUrl,
     })
       .then(() => {
         Alert.alert("User data saved successfully!");

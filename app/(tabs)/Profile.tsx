@@ -1,11 +1,64 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View } from "@/components/Themed";
 import { Button, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { Link } from "expo-router";
+import { child, get, getDatabase, ref, remove } from "firebase/database";
+import { deleteUser } from "firebase/auth";
 
 const Profile = () => {
+
+  const [userimage, setUrl] = React.useState("");
+  const user = FIREBASE_AUTH.currentUser;
+  const userId = FIREBASE_AUTH.currentUser?.uid;
+
+  useEffect(() => {
+      fetchUserData();
+    }, []);
+
+  const fetchUserData = async () => {
+      try {
+        const user = FIREBASE_AUTH.currentUser;
+        if (!user) {
+          console.warn("No user logged in");
+          return;
+        }
+  
+        const userId = FIREBASE_AUTH.currentUser?.uid;
+        const dbRef = ref(FIREBASE_Database);
+  
+        const snapshot = await get(child(dbRef, `users/${userId}`));
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+  
+          setUrl(userData.imageUrl || "");
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+  const handleDeleteAccount = async () => {
+    if (user) {
+      try {
+        // Delete user data
+        const db = getDatabase();
+        await remove(ref(db, `users/${userId}`));
+  
+        // Delete user
+        await deleteUser(user);
+  
+        console.log("User account and data deleted.");
+      } catch (error) {
+        console.error("Error deleting account:", error);
+      }
+    }
+  };
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "white" }}
@@ -15,28 +68,39 @@ const Profile = () => {
       <View style={styles.userCard}>
         <Image
           source={{
-            uri: "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Photo-Image.png",
+            uri: userimage || "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Pic-Background.png",
           }}
           style={styles.profileImage}
         />
         <View style={styles.userCardItems}>
           <Text style={styles.title}>{FIREBASE_AUTH.currentUser?.email}</Text>
-          <TouchableOpacity style={styles.btn}>
-            <FontAwesome5
-              name="user-edit"
-              style={styles.btnIcon}
-              size={16}
-              color="white"
-            />
-            <Text style={styles.btnColor}>Edit Profile</Text>
-          </TouchableOpacity>
+          <Link
+            href={{
+              pathname: "/EditProfile",
+              params: {
+                type: "edit",
+              },
+            }}
+            asChild
+            style={[styles.btn]}
+          >
+            <TouchableOpacity>
+              <FontAwesome5
+                name="user-edit"
+                style={styles.btnIcon}
+                size={16}
+                color="white"
+              />
+              <Text style={styles.btnColor}>Edit Profile</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
       </View>
       <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
 
       <Button
         title="Delete Account"
-        onPress={() => FIREBASE_AUTH.currentUser?.delete()}
+        onPress={handleDeleteAccount}
       />
     </SafeAreaView>
   );
@@ -99,12 +163,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: 'red',
+    backgroundColor: "red",
     borderRadius: 10,
     padding: 10,
     marginTop: 10,
     width: "80%",
-  }
+  },
 });
 
 export default Profile;
