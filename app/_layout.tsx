@@ -8,7 +8,7 @@ import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useColorScheme } from "@/components/useColorScheme";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -60,21 +60,39 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="Home" options={{ headerShown: false }} />
         <Stack.Screen
-        name="login"
-        options={{
-          presentation: 'modal',
-          title: '',
-          headerTitleStyle: {
-            fontFamily: 'mon-sb',
-          },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <AntDesign name="arrowleft" size={24} color="white" />
-            </TouchableOpacity>
-          ),
-        }}
-      />
+          name="login"
+          options={{
+            presentation: "modal",
+            title: "",
+            headerTitleStyle: {
+              fontFamily: "mon-sb",
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <AntDesign name="arrowleft" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="EditProfile"
+          options={{
+            presentation: "modal",
+            title: "",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTitleStyle: {
+              fontFamily: "mon-sb",
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <AntDesign name="arrowleft" size={24} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
