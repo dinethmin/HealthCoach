@@ -32,7 +32,7 @@ export default function LoginScreen() {
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
   const auth = FIREBASE_AUTH;
-  const imageUrl = "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Photo-Image.png";
+  const imageUrl = "https://img.freepik.com/premium-psd/contact-icon-illustration-isolated_23-2151903357.jpg?semt=ais_hybrid&w=550";
 
   const signIn = async () => {
     setLoading(true);
@@ -183,7 +183,6 @@ export default function LoginScreen() {
               style={styles.inputField}
               value={city}
               onChangeText={setCity}
-              secureTextEntry
             />
             <TextInput
               autoCapitalize="none"

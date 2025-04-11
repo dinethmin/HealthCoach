@@ -5,10 +5,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { get, ref, child } from "firebase/database";
+import { get, ref, child, update } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { useEffect } from "react";
@@ -19,10 +22,27 @@ const EditProfile = () => {
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
+  const [imageUrl, setUrl] = useState("");
+  //updated
+  const [newName, setNewName] = useState("");
+  const [newBirthday, setNewBirthday] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newGender, setNewGender] = useState("");
+  const [newCity, setNewCity] = useState("");
+  const [newImageUrl, setNewUrl] = useState("");
 
   useEffect(() => {
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    setNewName(name);
+    setNewBirthday(birthday);
+    setNewPhone(phone);
+    setNewGender(gender);
+    setNewCity(city);
+    setNewUrl(imageUrl);
+  }, [name, birthday, phone, gender, city, imageUrl]);
 
   const fetchUserData = async () => {
     try {
@@ -44,6 +64,7 @@ const EditProfile = () => {
         setPhone(userData.phone || "");
         setGender(userData.gender || "");
         setCity(userData.city || "");
+        setUrl(userData.imageUrl || "");
       } else {
         console.log("No data available");
       }
@@ -52,73 +73,130 @@ const EditProfile = () => {
     }
   };
 
+  const updateUserData = async () => {
+    try {
+      const user = FIREBASE_AUTH.currentUser;
+      if (!user) {
+        console.warn("No user logged in");
+        return;
+      }
+
+      // Check if any update is avalable before updating
+      if (
+        newName === name &&
+        newPhone === phone &&
+        newBirthday === birthday &&
+        newGender === gender &&
+        newCity === city &&
+        newImageUrl === imageUrl
+      ) {
+        Alert.alert("No data available to update");
+        return;
+      }
+
+      if (user) {
+        const userId = FIREBASE_AUTH.currentUser?.uid;
+        const userRef = ref(FIREBASE_Database, `users/${userId}`);
+
+        await update(userRef, {
+          name: newName,
+          phone: newPhone,
+          birthday: newBirthday,
+          gender: newGender,
+          city: newCity,
+          imageUrl: newImageUrl,
+        });
+        Alert.alert("Success", "Your profile has been updated!");
+      }
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <View style={{ flex: 1, padding: 20 }}>
-        <Text style={styles.topTitle}>Edit Profile</Text>
-        <TextInput
-          autoCapitalize="words"
-          placeholder="Name"
-          style={styles.inputField}
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          autoCapitalize="none"
-          placeholder="Phone"
-          style={styles.inputField}
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="phone-pad"
-        />
-        {phone && !/^[0-9]{10}$/.test(phone) && (
-          <Text style={styles.errorText}>
-            Please enter a valid phone number format (10 digit).
-          </Text>
-        )}
-        <TextInput
-          autoCapitalize="none"
-          placeholder="Birthday (DD/MM/YYYY)"
-          style={styles.inputField}
-          value={birthday}
-          onChangeText={setBirthday}
-        />
-        {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(birthday) && (
-          <Text style={styles.errorText}>
-            Please enter a valid date format.
-          </Text>
-        )}
-        <TextInput
-          autoCapitalize="words"
-          placeholder="Gender (Male, Female, Non-binary)"
-          style={styles.inputField}
-          value={gender}
-          onChangeText={setGender}
-        />
-        {gender &&
-          !["Male", "Female", "Non-binary", "Other"].includes(gender) && (
-            <Text style={styles.errorText}>Please enter a valid gender.</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+        keyboardVerticalOffset={1}
+      >
+        <View style={{ flex: 1, padding: 20 }}>
+          <Text style={styles.topTitle}>Edit Profile</Text>
+          <TextInput
+            autoCapitalize="words"
+            placeholder={name}
+            style={styles.inputField}
+            value={newName}
+            onChangeText={setNewName}
+          />
+          <TextInput
+            autoCapitalize="none"
+            placeholder={phone}
+            style={styles.inputField}
+            value={newPhone}
+            onChangeText={setNewPhone}
+            keyboardType="phone-pad"
+          />
+          {phone && !/^[0-9]{10}$/.test(newPhone) && (
+            <Text style={styles.errorText}>
+              Please enter a valid phone number format (10 digit).
+            </Text>
           )}
-        <TextInput
-          autoCapitalize="words"
-          placeholder="City"
-          style={styles.inputField}
-          value={city}
-          onChangeText={setCity}
-          secureTextEntry
-        />
-        <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btn}>
-            <FontAwesome5
-              name="user-edit"
-              style={styles.btnIcon}
-              size={16}
-              color="white"
-            />
-            <Text style={styles.btnColor}>Edit Profile</Text>
-          </TouchableOpacity>
+          <TextInput
+            autoCapitalize="none"
+            placeholder={birthday}
+            style={styles.inputField}
+            value={newBirthday}
+            onChangeText={setNewBirthday}
+          />
+          {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(newBirthday) && (
+            <Text style={styles.errorText}>
+              Please enter a valid date format (DD/MM/YYYY).
+            </Text>
+          )}
+          <TextInput
+            autoCapitalize="words"
+            placeholder={newGender}
+            style={styles.inputField}
+            value={newGender}
+            onChangeText={setNewGender}
+          />
+          {gender &&
+            !["Male", "Female", "Non-binary", "Other"].includes(newGender) && (
+              <Text style={styles.errorText}>
+                Please enter a valid gender (Male, Female, Non-binary).
+              </Text>
+            )}
+          <TextInput
+            autoCapitalize="words"
+            placeholder={city}
+            style={styles.inputField}
+            value={newCity}
+            onChangeText={setNewCity}
+          />
+          <TextInput
+            autoCapitalize="none"
+            placeholder={imageUrl}
+            style={styles.inputField}
+            value={newImageUrl}
+            onChangeText={setNewUrl}
+          />
+          <Text style={styles.nomalText}>
+                Please enter a valid image url or don't change the url.
+              </Text>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity style={styles.btn} onPress={updateUserData}>
+              <FontAwesome5
+                name="user-check"
+                style={styles.btnIcon}
+                size={16}
+                color="white"
+              />
+              <Text style={styles.btnColor}>Save Details</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -155,6 +233,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 4,
   },
+  nomalText: {
+    color: "blue",
+    fontSize: 14,
+    marginTop: 4,
+  },
   btnIcon: {
     paddingRight: 7,
   },
@@ -166,7 +249,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "red",
+    backgroundColor: "green",
     borderRadius: 10,
     padding: 10,
     marginTop: 10,
