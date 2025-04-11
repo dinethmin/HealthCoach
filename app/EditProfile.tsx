@@ -122,6 +122,7 @@ const EditProfile = () => {
       >
         <View style={{ flex: 1, padding: 20 }}>
           <Text style={styles.topTitle}>Edit Profile</Text>
+          <Text style={styles.inputTitle}>Name</Text>
           <TextInput
             autoCapitalize="words"
             placeholder={name}
@@ -129,6 +130,7 @@ const EditProfile = () => {
             value={newName}
             onChangeText={setNewName}
           />
+          <Text style={styles.inputTitle}>Phone</Text>
           <TextInput
             autoCapitalize="none"
             placeholder={phone}
@@ -142,6 +144,7 @@ const EditProfile = () => {
               Please enter a valid phone number format (10 digit).
             </Text>
           )}
+          <Text style={styles.inputTitle}>Birthday</Text>
           <TextInput
             autoCapitalize="none"
             placeholder={birthday}
@@ -154,6 +157,7 @@ const EditProfile = () => {
               Please enter a valid date format (DD/MM/YYYY).
             </Text>
           )}
+          <Text style={styles.inputTitle}>Gender</Text>
           <TextInput
             autoCapitalize="words"
             placeholder={newGender}
@@ -167,6 +171,7 @@ const EditProfile = () => {
                 Please enter a valid gender (Male, Female, Non-binary).
               </Text>
             )}
+          <Text style={styles.inputTitle}>City</Text>
           <TextInput
             autoCapitalize="words"
             placeholder={city}
@@ -174,6 +179,7 @@ const EditProfile = () => {
             value={newCity}
             onChangeText={setNewCity}
           />
+          <Text style={styles.inputTitle}>Profile Image</Text>
           <TextInput
             autoCapitalize="none"
             placeholder={imageUrl}
@@ -182,8 +188,8 @@ const EditProfile = () => {
             onChangeText={setNewUrl}
           />
           <Text style={styles.nomalText}>
-                Please enter a valid image url or don't change the url.
-              </Text>
+            Please enter a valid image url or don't change the url.
+          </Text>
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={updateUserData}>
               <FontAwesome5
@@ -213,11 +219,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   topTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     color: "black",
-    margin: 10,
+    marginBottom: 10,
     textAlign: "center",
+  },
+  inputTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
   },
   inputField: {
     marginVertical: 4,
