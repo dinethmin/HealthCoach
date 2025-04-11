@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
@@ -16,6 +17,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { ref, set } from "firebase/database";
+import { FIREBASE_Database } from "../FirebaseConfig";
 import { router } from "expo-router";
 
 export default function LoginScreen() {
@@ -46,12 +49,48 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      saveUserData();
       if (user) router.replace("/(tabs)");
     } catch (error: any) {
       console.log(error);
       alert("Sign up failed: " + error.message);
     }
     setLoading(false);
+  };
+
+  const saveUserData = () => {
+    if (!name || !phone || !birthday || !gender || !city) {
+      Alert.alert("All fields are required!");
+      return;
+    }
+
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      Alert.alert("User ID not found");
+      return;
+    }
+
+    set(ref(FIREBASE_Database, "users/" + userId), {
+      name,
+      phone,
+      birthday,
+      gender,
+      city,
+      email,
+    })
+      .then(() => {
+        Alert.alert("User data saved successfully!");
+        setName("");
+        setPhone("");
+        setBirthday("");
+        setGender("");
+        setCity("");
+      })
+      .catch((error) => {
+        console.error("Error saving user data: ", error);
+        Alert.alert("Error saving data");
+      });
   };
 
   return (
@@ -113,7 +152,7 @@ export default function LoginScreen() {
             )}
             <TextInput
               autoCapitalize="none"
-              placeholder="Birthday (MM/DD/YYYY)"
+              placeholder="Birthday (DD/MM/YYYY)"
               style={styles.inputField}
               value={birthday}
               onChangeText={setBirthday}

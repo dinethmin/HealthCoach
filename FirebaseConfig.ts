@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getDatabase } from "firebase/database";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -16,6 +17,7 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 const firebaseConfig = {
   apiKey: "AIzaSyByiDdAhtwz39-SSPa73AhsfZq4YEOoAz8",
   authDomain: "healthcoach-64321.firebaseapp.com",
+  databaseURL: "https://healthcoach-64321-default-rtdb.firebaseio.com",
   projectId: "healthcoach-64321",
   storageBucket: "healthcoach-64321.firebasestorage.app",
   messagingSenderId: "639459962024",
@@ -30,5 +32,6 @@ export const FIREBASE_AUTH = initializeAuth(FIREBASE_APP, {
 });
 export const FIREBASE_DB = getFirestore(FIREBASE_APP);
 export const FIREBASE_Storage = getStorage(FIREBASE_APP);
+export const FIREBASE_Database = getDatabase(FIREBASE_APP);
 export { ref, getDownloadURL };
 
