@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, router, Tabs } from "expo-router";
-import { Pressable, Text, ActivityIndicator, View } from "react-native";
+import { router, Tabs } from "expo-router";
+import { Text, ActivityIndicator, View } from "react-native";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-//ICONS
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+//Icons Imports
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -55,22 +47,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Tab One",
+          headerShown: false,
+          title: "Home",
           tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
         }}
       />
       <Tabs.Screen
