@@ -6,8 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
-import { child, get, getDatabase, ref, remove } from "firebase/database";
-import { deleteUser } from "firebase/auth";
+import { child, get, ref } from "firebase/database";
 import { ColorPalette } from "@/constants/Colors";
 
 const Profile = () => {
@@ -15,8 +14,6 @@ const Profile = () => {
   const [newImageUrl, setNewUrl] = useState("");
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
-  const user = FIREBASE_AUTH.currentUser;
-  const userId = FIREBASE_AUTH.currentUser?.uid;
 
   useEffect(() => {
     fetchUserData();
@@ -49,23 +46,6 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    if (user) {
-      try {
-        // Delete user data
-        const db = getDatabase();
-        await remove(ref(db, `users/${userId}`));
-
-        // Delete user
-        await deleteUser(user);
-
-        console.log("User account and data deleted.");
-      } catch (error) {
-        console.error("Error deleting account:", error);
-      }
     }
   };
 
@@ -191,7 +171,6 @@ const Profile = () => {
       </View>
       <View style={styles.separator} />
       <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
-      <Button title="Delete Account" onPress={handleDeleteAccount} />
     </SafeAreaView>
   );
 };
