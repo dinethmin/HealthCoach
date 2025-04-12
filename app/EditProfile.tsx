@@ -120,7 +120,7 @@ const EditProfile = () => {
         style={styles.container}
         keyboardVerticalOffset={1}
       >
-        <View style={{ flex: 1, padding: 20 }}>
+        <View style={{ flex: 1, padding: 15 }}>
           <Text style={styles.topTitle}>Edit Profile</Text>
           <Text style={styles.inputTitle}>Name</Text>
           <TextInput
@@ -210,7 +210,6 @@ const EditProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "white",
   },
   title: {

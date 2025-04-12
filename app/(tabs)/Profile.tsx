@@ -4,23 +4,28 @@ import { Button, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 import { child, get, getDatabase, ref, remove } from "firebase/database";
 import { deleteUser } from "firebase/auth";
+import { ColorPalette } from "@/constants/Colors";
 
 const Profile = () => {
   const [userimage, setUrl] = React.useState("");
   const [newImageUrl, setNewUrl] = useState("");
+  const [name, setName] = useState("");
+  const [newName, setNewName] = useState("");
   const user = FIREBASE_AUTH.currentUser;
   const userId = FIREBASE_AUTH.currentUser?.uid;
 
   useEffect(() => {
     fetchUserData();
-  }, []);
+  });
 
   useEffect(() => {
     setNewUrl(userimage);
-  }, [newImageUrl]);
+    setNewName(name);
+  }, [newImageUrl, name, newName, userimage]);
 
   const fetchUserData = async () => {
     try {
@@ -38,6 +43,7 @@ const Profile = () => {
         const userData = snapshot.val();
 
         setUrl(userData.imageUrl || "");
+        setName(userData.name || "");
       } else {
         console.log("No data available");
       }
@@ -79,12 +85,12 @@ const Profile = () => {
           style={styles.profileImage}
         />
         <View style={styles.userCardItems}>
-          <Text style={styles.title}>{FIREBASE_AUTH.currentUser?.email}</Text>
+          <Text style={styles.title}>{name}</Text>
           <Link
             href={{
               pathname: "/EditProfile",
               params: {
-                type: "edit",
+                type: "page",
               },
             }}
             asChild
@@ -102,8 +108,89 @@ const Profile = () => {
           </Link>
         </View>
       </View>
+      <View style={styles.profileCard}>
+        <View
+          style={{
+            backgroundColor: ColorPalette.greyLight,
+            padding: 5,
+            width: "100%",
+          }}
+        >
+          <Text style={styles.profileTitle}>Account Settings</Text>
+        </View>
+        <Link
+          href={{
+            pathname: "/AccountLogin",
+            params: {
+              type: "page",
+            },
+          }}
+          asChild
+        >
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>Account Login</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
+        </Link>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>Privacy</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>Notification</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>Language</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: 10, backgroundColor: "transparent" }} />
+      <View style={styles.profileCard}>
+        <View
+          style={{
+            backgroundColor: ColorPalette.greyLight,
+            padding: 5,
+            width: "100%",
+          }}
+        >
+          <Text style={styles.profileTitle}>Support</Text>
+        </View>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>Feedback</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>About Health Coach</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>Safety information</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexDirection: "row", justifyContent: "space-between" }}
+        >
+          <Text style={styles.profileSubTitle}>Rate us</Text>
+          <AntDesign style={styles.profileSubTitleLogo} name="right" />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.separator} />
       <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
-
       <Button title="Delete Account" onPress={handleDeleteAccount} />
     </SafeAreaView>
   );
@@ -128,11 +215,40 @@ const styles = StyleSheet.create({
     margin: 10,
     textAlign: "center",
   },
+  profileTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+    paddingLeft: 5,
+  },
+  profileSubTitle: {
+    fontSize: 14,
+    fontWeight: "condensedBold",
+    color: "black",
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 12,
+  },
+  profileSubTitleLogo: {
+    fontSize: 14,
+    fontWeight: "condensedBold",
+    color: "black",
+    alignSelf: "center",
+    paddingTop: 10,
+    paddingBottom: 6,
+    paddingRight: 12,
+    paddingLeft: 12,
+  },
   userCard: {
     flexDirection: "row",
     textAlign: "center",
     alignItems: "center",
     justifyContent: "space-evenly",
+    backgroundColor: "transparent",
+    padding: 5,
+  },
+  profileCard: {
+    flexDirection: "column",
     backgroundColor: "transparent",
   },
   userCardItems: {
@@ -143,9 +259,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+    height: 40,
+    backgroundColor: "transparent",
   },
   profileImage: {
     width: 120,
