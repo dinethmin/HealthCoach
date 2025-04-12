@@ -4,6 +4,9 @@ import { Text, View } from "@/components/Themed";
 import Checkbox from "expo-checkbox";
 import axios from "axios";
 import { ColorPalette } from "@/constants/Colors";
+import { ref, push, get, child } from "firebase/database";
+import { FIREBASE_Database } from "../../FirebaseConfig";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 const symptomsList = [
   "Vomiting",
@@ -27,6 +30,7 @@ const symptomsList = [
 
 export default function TabTwoScreen() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [isVisible, setIsVisible] = useState(true); //This is to control the visibility of the 'Get Prediction' button
   const [prediction, setPrediction] = useState<{
     predicted_disease: string;
     probabilities: Record<string, number>;
@@ -45,6 +49,7 @@ export default function TabTwoScreen() {
   const handleClearSelection = () => {
     setSelectedSymptoms([]);
     setPrediction(null);
+    setIsVisible(true);
   };
 
   const handleGetPrediction = async () => {
@@ -57,11 +62,43 @@ export default function TabTwoScreen() {
     }
 
     try {
-      const response = await axios.post("https://predict-639459962024.us-central1.run.app/predict",
-        { symptoms: selectedSymptoms.map(s => s.toLowerCase().replace(/\s+/g, "")) }
+      const response = await axios.post(
+        "https://predict-639459962024.us-central1.run.app/predict",
+        {
+          symptoms: selectedSymptoms.map((s) =>
+            s.toLowerCase().replace(/\s+/g, "")
+          ),
+        }
       );
-      
-      setPrediction(response.data as { predicted_disease: string; probabilities: Record<string, number> });
+
+      const predictionData = response.data as {
+        predicted_disease: string;
+        probabilities: Record<string, number>;
+      };
+
+      setPrediction(predictionData);
+      setIsVisible(false);
+
+      const user = FIREBASE_AUTH.currentUser;
+      if (!user) return;
+
+      // Get user's city from Firebase Database
+      const userId = FIREBASE_AUTH.currentUser?.uid;
+      const dbRef = ref(FIREBASE_Database);
+      const snapshot = await get(child(dbRef, `users/${userId}`));
+      const city = snapshot.exists() && snapshot.val().city ? snapshot.val().city : "Unknown";
+
+      // Save prediction data to Firebase Database
+      const predictionRef = ref(FIREBASE_Database, `predictions/${userId}`);
+      await push(predictionRef, {
+        timestamp: new Date().toISOString(),
+        selectedSymptoms,
+        predictedDisease: predictionData.predicted_disease,
+        probabilities: predictionData.probabilities,
+        city,
+      });
+
+      console.log("Prediction stored successfully.");
     } catch (error) {
       console.error("Error getting prediction:", error);
       Alert.alert(
@@ -89,20 +126,24 @@ export default function TabTwoScreen() {
 
       <Button title="Cear All" onPress={handleClearSelection} />
       <View style={styles.br} />
-      <Button title="Get Prediction" onPress={handleGetPrediction} />
+      {isVisible && (
+        <Button title="Get Prediction" onPress={handleGetPrediction} />
+      )}
 
       {prediction && (
         <View style={styles.predictionContainer}>
           <Text style={styles.predictionTitle}>Prediction Result</Text>
-          <Text style={{color: "black",}}>Predicted Disease: {prediction.predicted_disease}</Text>
-          <Text style={{color: "black",}}>Probabilities:</Text>
-          {Object.entries(prediction.probabilities).map(
-            ([disease, probability]) => (
-              <Text style={{color: "black",}} key={disease}>
+          <Text style={{ color: "black" }}>
+            Predicted Disease: {prediction.predicted_disease}
+          </Text>
+          <Text style={{ color: "black" }}>Probabilities:</Text>
+          {Object.entries(prediction.probabilities)
+            .sort((a, b) => b[1] - a[1])
+            .map(([disease, probability]) => (
+              <Text style={{ color: "black" }} key={disease}>
                 {disease}: {probability}%
               </Text>
-            )
-          )}
+            ))}
         </View>
       )}
     </View>
@@ -113,7 +154,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor:'white',
+    backgroundColor: "white",
   },
   title: {
     fontSize: 24,
@@ -135,7 +176,7 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     marginLeft: 10,
     fontSize: 16,
-    color:'black',
+    color: "black",
   },
   predictionContainer: {
     marginTop: 20,
@@ -144,7 +185,6 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 10,
     backgroundColor: "#f9f9f9",
-    
   },
   predictionTitle: {
     fontSize: 18,
@@ -154,6 +194,6 @@ const styles = StyleSheet.create({
   },
   br: {
     height: 4,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
 });
