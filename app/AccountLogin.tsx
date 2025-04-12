@@ -1,9 +1,39 @@
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { ColorPalette } from "@/constants/Colors";
+import { getDatabase, ref, remove } from "firebase/database";
+import { deleteUser } from "@firebase/auth";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const AccountLogin = () => {
+  const user = FIREBASE_AUTH.currentUser;
+  const userId = FIREBASE_AUTH.currentUser?.uid;
+
+  const handleDeleteAccount = async () => {
+    if (user) {
+      try {
+        // Delete user data
+        const db = getDatabase();
+        await remove(ref(db, `users/${userId}`));
+
+        // Delete user
+        await deleteUser(user);
+
+        console.log("User account and data deleted.");
+      } catch (error) {
+        console.error("Error deleting account:", error);
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View>
@@ -21,6 +51,28 @@ const AccountLogin = () => {
         <Text style={styles.profileTitle}>You have signed up with </Text>
         <Text style={styles.nomalText}>{FIREBASE_AUTH.currentUser?.email}</Text>
       </View>
+      <View style={styles.separator} />
+      <View
+        style={{
+          backgroundColor: ColorPalette.greyLight2,
+          padding: 5,
+          width: "100%",
+          height: "15%",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={styles.profileTitle}>Your userID</Text>
+        <Text selectable={true} style={styles.nomalText}>
+          {userId}
+        </Text>
+      </View>
+      <View style={{ height: "40%" }} />
+      <TouchableOpacity style={styles.btn} onPress={handleDeleteAccount}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <AntDesign name="deleteuser" size={22} color="white" />
+          <Text style={styles.btnColor}>Delete My Account</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -56,7 +108,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   separator: {
-    height: 20,
+    height: 10,
     backgroundColor: "transparent",
   },
   nomalText: {
@@ -65,27 +117,18 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     fontSize: 17,
   },
-  btnIcon: {
-    paddingRight: 7,
-  },
   btnColor: {
     color: "white",
     fontSize: 16,
   },
   btn: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "green",
+    alignSelf: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "red",
     borderRadius: 10,
     padding: 10,
-    marginTop: 10,
-    width: "80%",
-  },
-  btnContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    width: "70%",
   },
 });
 
