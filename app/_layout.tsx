@@ -63,9 +63,11 @@ function RootLayoutNav() {
           name="login"
           options={{
             presentation: "modal",
-            title: "",
+            title: "  Back",
             headerTitleStyle: {
               fontFamily: "mon-sb",
+              fontSize: 20,
+              color: "#a5a3a3",
             },
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>
@@ -79,12 +81,34 @@ function RootLayoutNav() {
           name="EditProfile"
           options={{
             presentation: "modal",
-            title: "",
+            title: "  Back",
             headerStyle: {
               backgroundColor: "white",
             },
             headerTitleStyle: {
               fontFamily: "mon-sb",
+              fontSize: 20,
+              color: "#a5a3a3",
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <AntDesign name="arrowleft" size={24} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="AccountLogin"
+          options={{
+            presentation: "modal",
+            title: "  Back",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTitleStyle: {
+              fontFamily: "mon-sb",
+              fontSize: 20,
+              color: "#a5a3a3",
             },
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>
