@@ -2,19 +2,55 @@ import { StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "react-native";
+import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
+import { child, get, ref } from "firebase/database";
+import { useEffect, useState } from "react";
 
 export default function TabOneScreen() {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const user = FIREBASE_AUTH.currentUser;
+      if (!user) {
+        console.warn("No user logged in");
+        return;
+      }
+
+      const userId = FIREBASE_AUTH.currentUser?.uid;
+      const dbRef = ref(FIREBASE_Database);
+
+      const snapshot = await get(child(dbRef, `users/${userId}`));
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+
+        setName(userData.name || "");
+      } else {
+        console.log("No data available");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "white" }}
       edges={["top", "left", "right"]}
     >
-      <View style={styles.container}>
-        <Text style={styles.topTitle}>Welcome to Health Coach</Text>
+      <View style={styles.userCard}>
         <Image
-          style={{ margin: 0, padding: 0, width: 50 }}
+          style={{ margin: 0, padding: 0, width: 100 }}
           source={require("../../assets/images/Animation.gif")}
         />
+        <View style={styles.userCardItems}>
+          <Text style={styles.topTitle}>Hi {name}, </Text>
+          <Text style={styles.topTitle}>Welcome to Health Coach.</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -27,10 +63,12 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   container: {
+    alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    flexDirection: "row",
+    flexDirection: "column",
+    width: "80%",
   },
   title: {
     fontSize: 20,
@@ -41,8 +79,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "black",
-    margin: 10,
-    textAlign: "center",
   },
   profileTitle: {
     fontSize: 16,
@@ -70,21 +106,18 @@ const styles = StyleSheet.create({
   },
   userCard: {
     flexDirection: "row",
-    textAlign: "center",
     alignItems: "center",
-    justifyContent: "space-evenly",
-    backgroundColor: "transparent",
-    padding: 5,
-  },
-  profileCard: {
-    flexDirection: "column",
     backgroundColor: "transparent",
   },
   userCardItems: {
     flexDirection: "column",
-    textAlign: "center",
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    backgroundColor: "transparent",
+    alignItems: "flex-start",
+    padding: 0,
+    margin: 0,
+  },
+  profileCard: {
+    flexDirection: "column",
     backgroundColor: "transparent",
   },
   profileImage: {
