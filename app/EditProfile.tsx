@@ -8,6 +8,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -15,6 +16,7 @@ import { get, ref, child, update } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { useEffect } from "react";
+import { ColorPalette } from "@/constants/Colors";
 
 const EditProfile = () => {
   const [name, setName] = useState("");
@@ -122,85 +124,89 @@ const EditProfile = () => {
       >
         <View style={{ flex: 1, padding: 15 }}>
           <Text style={styles.topTitle}>Edit Profile</Text>
-          <Text style={styles.inputTitle}>Name</Text>
-          <TextInput
-            autoCapitalize="words"
-            placeholder={name}
-            style={styles.inputField}
-            value={newName}
-            onChangeText={setNewName}
-          />
-          <Text style={styles.inputTitle}>Phone</Text>
-          <TextInput
-            autoCapitalize="none"
-            placeholder={phone}
-            style={styles.inputField}
-            value={newPhone}
-            onChangeText={setNewPhone}
-            keyboardType="phone-pad"
-          />
-          {phone && !/^[0-9]{10}$/.test(newPhone) && (
-            <Text style={styles.errorText}>
-              Please enter a valid phone number format (10 digit).
-            </Text>
-          )}
-          <Text style={styles.inputTitle}>Birthday</Text>
-          <TextInput
-            autoCapitalize="none"
-            placeholder={birthday}
-            style={styles.inputField}
-            value={newBirthday}
-            onChangeText={setNewBirthday}
-          />
-          {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(newBirthday) && (
-            <Text style={styles.errorText}>
-              Please enter a valid date format (DD/MM/YYYY).
-            </Text>
-          )}
-          <Text style={styles.inputTitle}>Gender</Text>
-          <TextInput
-            autoCapitalize="words"
-            placeholder={newGender}
-            style={styles.inputField}
-            value={newGender}
-            onChangeText={setNewGender}
-          />
-          {gender &&
-            !["Male", "Female", "Non-binary", "Other"].includes(newGender) && (
+          <ScrollView style={styles.scrollContainer}>
+            <Text style={styles.inputTitle}>Name</Text>
+            <TextInput
+              autoCapitalize="words"
+              placeholder={name}
+              style={styles.inputField}
+              value={newName}
+              onChangeText={setNewName}
+            />
+            <Text style={styles.inputTitle}>Phone</Text>
+            <TextInput
+              autoCapitalize="none"
+              placeholder={phone}
+              style={styles.inputField}
+              value={newPhone}
+              onChangeText={setNewPhone}
+              keyboardType="phone-pad"
+            />
+            {phone && !/^[0-9]{10}$/.test(newPhone) && (
               <Text style={styles.errorText}>
-                Please enter a valid gender (Male, Female, Non-binary).
+                Please enter a valid phone number format (10 digit).
               </Text>
             )}
-          <Text style={styles.inputTitle}>City</Text>
-          <TextInput
-            autoCapitalize="words"
-            placeholder={city}
-            style={styles.inputField}
-            value={newCity}
-            onChangeText={setNewCity}
-          />
-          <Text style={styles.inputTitle}>Profile Image</Text>
-          <TextInput
-            autoCapitalize="none"
-            placeholder={imageUrl}
-            style={styles.inputField}
-            value={newImageUrl}
-            onChangeText={setNewUrl}
-          />
-          <Text style={styles.nomalText}>
-            Please enter a valid image url or don't change the url.
-          </Text>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} onPress={updateUserData}>
-              <FontAwesome5
-                name="user-check"
-                style={styles.btnIcon}
-                size={16}
-                color="white"
-              />
-              <Text style={styles.btnColor}>Save Details</Text>
-            </TouchableOpacity>
-          </View>
+            <Text style={styles.inputTitle}>Birthday</Text>
+            <TextInput
+              autoCapitalize="none"
+              placeholder={birthday}
+              style={styles.inputField}
+              value={newBirthday}
+              onChangeText={setNewBirthday}
+            />
+            {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(newBirthday) && (
+              <Text style={styles.errorText}>
+                Please enter a valid date format (DD/MM/YYYY).
+              </Text>
+            )}
+            <Text style={styles.inputTitle}>Gender</Text>
+            <TextInput
+              autoCapitalize="words"
+              placeholder={newGender}
+              style={styles.inputField}
+              value={newGender}
+              onChangeText={setNewGender}
+            />
+            {gender &&
+              !["Male", "Female", "Non-binary", "Other"].includes(
+                newGender
+              ) && (
+                <Text style={styles.errorText}>
+                  Please enter a valid gender (Male, Female, Non-binary).
+                </Text>
+              )}
+            <Text style={styles.inputTitle}>City</Text>
+            <TextInput
+              autoCapitalize="words"
+              placeholder={city}
+              style={styles.inputField}
+              value={newCity}
+              onChangeText={setNewCity}
+            />
+            <Text style={styles.inputTitle}>Profile Image</Text>
+            <TextInput
+              autoCapitalize="none"
+              placeholder={imageUrl}
+              style={styles.inputField}
+              value={newImageUrl}
+              onChangeText={setNewUrl}
+            />
+            <Text style={styles.nomalText}>
+              Please enter a valid image url or don't change the url.
+            </Text>
+            <View style={styles.btnContainer}>
+              <TouchableOpacity style={styles.btn} onPress={updateUserData}>
+                <FontAwesome5
+                  name="user-check"
+                  style={styles.btnIcon}
+                  size={16}
+                  color="white"
+                />
+                <Text style={styles.btnColor}>Save Details</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -211,6 +217,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+  },
+  scrollContainer: {
+    marginBottom: 20,
+    backgroundColor: ColorPalette.light,
   },
   title: {
     fontSize: 30,
