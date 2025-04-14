@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Text, View } from "@/components/Themed";
 import { Button, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Link } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
 import { child, get, ref } from "firebase/database";
 import { ColorPalette } from "@/constants/Colors";
 
@@ -15,14 +15,13 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
 
-  useEffect(() => {
-    fetchUserData();
-  });
-
-  useEffect(() => {
-    setNewUrl(userimage);
-    setNewName(name);
-  }, [newImageUrl, name, newName, userimage]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+      setNewUrl(userimage);
+      setNewName(name);
+    }, [newImageUrl, name, newName, userimage])
+  );
 
   const fetchUserData = async () => {
     try {
