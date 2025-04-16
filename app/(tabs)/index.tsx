@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useFocusEffect } from "expo-router";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { ColorPalette } from "@/constants/Colors";
 
 export default function TabOneScreen() {
   const [name, setName] = useState("");
@@ -59,7 +60,49 @@ export default function TabOneScreen() {
           <Text style={styles.topTitle}>Welcome to Health Coach.</Text>
         </View>
       </View>
-      <View style={styles.itemCard}></View>
+      <View style={styles.itemCardContainer}>
+        <TouchableOpacity style={styles.itemContainer}>
+          <LottieView
+            source={{
+              uri: "https://lottie.host/9827b19f-01e0-4fd3-ac2b-6bfc5a85457a/k21LYXj63z.json",
+            }}
+            autoPlay
+            loop
+            speed={0.5}
+            style={{ width: 60, height: 70 }}
+          />
+          <Text style={styles.profileSubTitle}>Chat</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.itemContainer}>
+          <LottieView
+            source={{
+              uri: "https://lottie.host/da19275e-76d1-47b6-837c-662ba8c92100/bJlij7YC5C.json",
+            }}
+            autoPlay
+            loop
+            speed={0.5}
+            style={{ width: 70, height: 70 }}
+          />
+          <Text style={styles.profileSubTitle}>Prediction History</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.itemContainer}>
+          <LottieView
+            source={{
+              uri: "https://lottie.host/b6e43384-c126-45df-b70b-7601f63b2c76/MseuYfW2cZ.json",
+            }}
+            autoPlay
+            loop
+            speed={0.5}
+            style={{ width: 70, height: 70 }}
+          />
+          <Text style={styles.profileSubTitle}>Health analysis</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.separator} />
+      <View style={styles.itemCard}>
+        <Text style={styles.profileTitle}>Health Tips</Text>
+      </View>
+      <View style={styles.separator} />
       <View style={styles.itemCard}>
         <Link
           href={{
@@ -111,9 +154,8 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+    height: 20,
+    backgroundColor: "transparent",
   },
   container: {
     alignSelf: "center",
@@ -141,21 +183,14 @@ const styles = StyleSheet.create({
   },
   profileSubTitle: {
     fontSize: 14,
-    fontWeight: "condensedBold",
+    fontWeight: "bold",
     color: "black",
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 12,
   },
   profileSubTitleLogo: {
     fontSize: 14,
     fontWeight: "condensedBold",
     color: "black",
     alignSelf: "center",
-    paddingTop: 10,
-    paddingBottom: 6,
-    paddingRight: 12,
-    paddingLeft: 12,
   },
   userCard: {
     flexDirection: "row",
@@ -173,7 +208,23 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignSelf: "center",
     alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  itemCardContainer: {
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    padding: 0,
+    margin: 0,
+  },
+  itemContainer: {
+    backgroundColor: ColorPalette.lightBlue,
+    alignItems: "center",
     justifyContent: "center",
+    padding: 8,
+    margin: 0,
+    borderRadius: 10,
   },
   profileImage: {
     width: 120,

@@ -28,6 +28,8 @@ export const ColorPalette = {
   yellow: '#FCBB80',
   orange: '#EF580B',
   blue: '#0000FA',
+  lightBlue:'#84ace5',
+  purple: '#A500FF',
   green: '#172E15',
   light: '#FFFCFF',
   grey: '#242026',
