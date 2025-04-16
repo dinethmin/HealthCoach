@@ -59,6 +59,7 @@ export default function TabOneScreen() {
           <Text style={styles.topTitle}>Welcome to Health Coach.</Text>
         </View>
       </View>
+      <View style={styles.itemCard}></View>
       <View style={styles.itemCard}>
         <Link
           href={{

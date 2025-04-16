@@ -1,56 +1,71 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Ionicons } from '@expo/vector-icons'
-import { defaultStyles } from '@/constants/Styles'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import {ColorPalette} from '@/constants/Colors'
-import { Link } from 'expo-router'
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { defaultStyles } from "@/constants/Styles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ColorPalette } from "@/constants/Colors";
+import { Link } from "expo-router";
+import LottieView from "lottie-react-native";
 
 const BottomLoginSheet = () => {
-
-  const { bottom }  = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
-      <Link href={{
-        pathname: '/login',
-        params: {
-          type: 'register',
-        }
-      }} asChild style={[defaultStyles.btn, styles.btnDark]}>
+      <Link
+        href={{
+          pathname: "/login",
+          params: {
+            type: "register",
+          },
+        }}
+        asChild
+        style={[defaultStyles.btn, styles.btnDark]}
+      >
         <TouchableOpacity>
-          <Ionicons name="mail" size={20} style={styles.btnIcon} color={ColorPalette.light}/>
+          <LottieView
+            source={{
+              uri: "https://lottie.host/1f9d65bc-5bfb-4769-8908-a720ae899fc5/Pqk7uq3v4K.json",
+            }}
+            autoPlay
+            loop
+            speed={0.5}
+            style={{ width: 40, height: 40 }}
+          />
           <Text style={styles.btnDarkText}>Continue with Email</Text>
         </TouchableOpacity>
       </Link>
-      <Link href={{
-        pathname: '/login',
-        params: {
-          type: 'login',
-        }
-      }} asChild style={[defaultStyles.btn, styles.btnDark]}>
+      <Link
+        href={{
+          pathname: "/login",
+          params: {
+            type: "login",
+          },
+        }}
+        asChild
+        style={[defaultStyles.btn, styles.btnDark]}
+      >
         <TouchableOpacity>
           <Text style={styles.btnDarkText}>Log in</Text>
         </TouchableOpacity>
       </Link>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    height: '20%',
-    width: '100%',
-    backgroundColor: '#000',
+    height: "20%",
+    width: "100%",
+    backgroundColor: "#000",
     padding: 26,
     gap: 14,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-
   },
   btnLight: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   btnIcon: {
     paddingRight: 7,
@@ -62,13 +77,14 @@ const styles = StyleSheet.create({
     backgroundColor: ColorPalette.grey,
   },
   btnDarkText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 20,
+    paddingLeft: 10,
   },
   btnOutline: {
     borderWidth: 3,
     borderColor: ColorPalette.grey,
-  }
-})
+  },
+});
 
-export default BottomLoginSheet
+export default BottomLoginSheet;
