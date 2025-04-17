@@ -8,9 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { defaultStyles } from "../constants/Styles";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import {
@@ -20,6 +21,7 @@ import {
 import { ref, set } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { router } from "expo-router";
+import { ColorPalette } from "@/constants/Colors";
 
 export default function LoginScreen() {
   const { type } = useLocalSearchParams<{ type: string }>();
@@ -32,7 +34,8 @@ export default function LoginScreen() {
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
   const auth = FIREBASE_AUTH;
-  const imageUrl = "https://img.freepik.com/premium-psd/contact-icon-illustration-isolated_23-2151903357.jpg?semt=ais_hybrid&w=550";
+  const imageUrl =
+    "https://img.freepik.com/premium-psd/contact-icon-illustration-isolated_23-2151903357.jpg?semt=ais_hybrid&w=550";
 
   const signIn = async () => {
     setLoading(true);
@@ -108,7 +111,31 @@ export default function LoginScreen() {
       )}
 
       <Text style={styles.title}>
-        {type === "login" ? "Welcome back" : "Create your account"}
+        {type === "login" ? (
+          <Text style={styles.title}>Login</Text>
+        ) : (
+          <View>
+            <Text style={styles.title}>Sign Up</Text>
+            <View style={styles.subContainer}>
+              <Text style={styles.subTitle}>
+                Are you a <Text style={{ color: "#55b39c" }}>Doctor? </Text>
+              </Text>
+              <Link
+                href={{
+                  pathname: "/DoctorSignUp",
+                  params: {
+                    type: "page",
+                  },
+                }}
+                asChild
+              >
+                <TouchableOpacity>
+                  <Text style={styles.subTitle2}>Sign up</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </View>
+        )}
       </Text>
 
       <View style={{ marginBottom: 20 }}>
@@ -129,9 +156,15 @@ export default function LoginScreen() {
               onChangeText={setPassword}
               secureTextEntry
             />
+            <TouchableOpacity
+              onPress={signIn}
+              style={[defaultStyles.btn, styles.btnPrimary]}
+            >
+              <Text style={styles.btnPrimaryText}>Login</Text>
+            </TouchableOpacity>
           </>
         ) : (
-          <>
+          <ScrollView style={styles.scrollContainer}>
             <TextInput
               autoCapitalize="words"
               placeholder="Name"
@@ -199,25 +232,15 @@ export default function LoginScreen() {
               onChangeText={setPassword}
               secureTextEntry
             />
-          </>
+            <TouchableOpacity
+              onPress={signUp}
+              style={[defaultStyles.btn, styles.btnPrimary]}
+            >
+              <Text style={styles.btnPrimaryText}>Create account</Text>
+            </TouchableOpacity>
+          </ScrollView>
         )}
       </View>
-
-      {type === "login" ? (
-        <TouchableOpacity
-          onPress={signIn}
-          style={[defaultStyles.btn, styles.btnPrimary]}
-        >
-          <Text style={styles.btnPrimaryText}>Login</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          onPress={signUp}
-          style={[defaultStyles.btn, styles.btnPrimary]}
-        >
-          <Text style={styles.btnPrimaryText}>Create account</Text>
-        </TouchableOpacity>
-      )}
     </KeyboardAvoidingView>
   );
 }
@@ -228,10 +251,35 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
   },
+  subContainer: {
+    flexDirection: "row",
+    paddingTop: 10,
+    paddingBottom: 20,
+    backgroundColor: "white",
+  },
+  subContainer2: {
+    backgroundColor: "white",
+  },
+  scrollContainer: {
+    marginBottom: 80,
+    backgroundColor: ColorPalette.light,
+  },
   title: {
     fontSize: 30,
     alignSelf: "center",
     fontWeight: "bold",
+  },
+  subTitle: {
+    fontSize: 18,
+    alignSelf: "center",
+    fontWeight: "bold",
+  },
+  subTitle2: {
+    fontSize: 18,
+    alignSelf: "center",
+    fontWeight: "bold",
+    textDecorationLine: "underline",
+    color: "#3279df",
   },
   inputField: {
     marginVertical: 4,
