@@ -95,6 +95,23 @@ function RootLayoutNav() {
         />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
+          name="DoctorProfile"
+          options={{
+            presentation: "modal",
+            title: "  Back",
+            headerTitleStyle: {
+              fontFamily: "mon-sb",
+              fontSize: 20,
+              color: "#a5a3a3",
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <AntDesign name="arrowleft" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
           name="EditProfile"
           options={{
             presentation: "modal",

@@ -18,7 +18,7 @@ import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { useEffect } from "react";
 import { ColorPalette } from "@/constants/Colors";
 
-const EditProfile = () => {
+const DoctorProfile = () => {
   const [name, setName] = useState("");
   const [birthday, setBirthday] = useState("");
   const [phone, setPhone] = useState("");
@@ -32,7 +32,6 @@ const EditProfile = () => {
   const [newGender, setNewGender] = useState("");
   const [newCity, setNewCity] = useState("");
   const [newImageUrl, setNewUrl] = useState("");
-
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -154,7 +153,7 @@ const EditProfile = () => {
         keyboardVerticalOffset={1}
       >
         <View style={{ flex: 1, padding: 15 }}>
-          <Text style={styles.topTitle}>Edit Profile</Text>
+          <Text style={styles.topTitle}>Doctor Profile</Text>
           <ScrollView style={styles.scrollContainer}>
             <Text style={styles.inputTitle}>Name</Text>
             <TextInput
@@ -313,4 +312,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProfile;
+export default DoctorProfile;

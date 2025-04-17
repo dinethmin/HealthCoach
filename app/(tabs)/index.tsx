@@ -13,6 +13,7 @@ import { ColorPalette } from "@/constants/Colors";
 export default function TabOneScreen() {
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
+  const [doctor, setDoctor] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -43,6 +44,7 @@ export default function TabOneScreen() {
         const userData = snapshot2.val();
 
         setName(userData.name || "");
+        setDoctor(true);
       } else {
         console.log("No data available");
       }
@@ -103,6 +105,32 @@ export default function TabOneScreen() {
           />
           <Text style={styles.profileSubTitle}>Health analysis</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.itemCardContainer2}>
+        {doctor === true ? (
+          <Link
+            href={{
+              pathname: "/DoctorProfile",
+              params: {
+                type: "page",
+              },
+            }}
+            asChild
+          >
+            <TouchableOpacity style={styles.itemContainer2}>
+              <LottieView
+                source={{
+                  uri: "https://lottie.host/e934bafa-bc89-4ebe-9e0b-584dc3088454/pgzVNMZtaE.json",
+                }}
+                autoPlay
+                loop
+                speed={0.5}
+                style={{ width: "50%", height: 80 }}
+              />
+              <Text style={styles.profileSubTitle}>Edit Doctor Details</Text>
+            </TouchableOpacity>
+          </Link>
+        ) : null}
       </View>
       <View style={styles.separator} />
       <View style={styles.itemCard}>
@@ -224,10 +252,30 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
+  itemCardContainer2: {
+    width: "100%",
+    backgroundColor: "transparent",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    margin: 0,
+  },
   itemContainer: {
     backgroundColor: ColorPalette.lightBlue,
     alignItems: "center",
     justifyContent: "center",
+    padding: 8,
+    margin: 0,
+    borderRadius: 10,
+  },
+  itemContainer2: {
+    backgroundColor: ColorPalette.lightBlue,
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
     padding: 8,
     margin: 0,
     borderRadius: 10,
