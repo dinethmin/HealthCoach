@@ -31,7 +31,7 @@ const BottomLoginSheet = () => {
             speed={0.5}
             style={{ width: 40, height: 40 }}
           />
-          <Text style={styles.btnDarkText}>Continue with Email</Text>
+          <Text style={styles.btnDarkText}>Signup with Email</Text>
         </TouchableOpacity>
       </Link>
       <Link

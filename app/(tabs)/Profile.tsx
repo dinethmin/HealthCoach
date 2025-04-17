@@ -34,9 +34,16 @@ const Profile = () => {
       const userId = FIREBASE_AUTH.currentUser?.uid;
       const dbRef = ref(FIREBASE_Database);
 
-      const snapshot = await get(child(dbRef, `users/${userId}`));
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
+      const snapshot1 = await get(child(dbRef, `users/${userId}`));
+      const snapshot2 = await get(child(dbRef, `doctor/${userId}`));
+
+      if (snapshot1.exists()) {
+        const userData = snapshot1.val();
+
+        setUrl(userData.imageUrl || "");
+        setName(userData.name || "");
+      } else if (snapshot2.exists()) {
+        const userData = snapshot2.val();
 
         setUrl(userData.imageUrl || "");
         setName(userData.name || "");

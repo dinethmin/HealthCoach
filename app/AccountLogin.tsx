@@ -23,6 +23,7 @@ const AccountLogin = () => {
         // Delete user data
         const db = getDatabase();
         await remove(ref(db, `users/${userId}`));
+        await remove(ref(db, `doctor/${userId}`));
 
         // Delete user
         await deleteUser(user);
