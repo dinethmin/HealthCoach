@@ -25,6 +25,8 @@ const EditProfile = () => {
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
   const [imageUrl, setUrl] = useState("");
+  const [MLN, setMLN] = useState("");
+  const [doctor, setDoctor] = useState(false);
   //updated
   const [newName, setNewName] = useState("");
   const [newBirthday, setNewBirthday] = useState("");
@@ -32,6 +34,7 @@ const EditProfile = () => {
   const [newGender, setNewGender] = useState("");
   const [newCity, setNewCity] = useState("");
   const [newImageUrl, setNewUrl] = useState("");
+  const [newMLN, setNewMLN] = useState("");
 
   useEffect(() => {
     fetchUserData();
@@ -44,7 +47,8 @@ const EditProfile = () => {
     setNewGender(gender);
     setNewCity(city);
     setNewUrl(imageUrl);
-  }, [name, birthday, phone, gender, city, imageUrl]);
+    setNewMLN(MLN);
+  }, [name, birthday, phone, gender, city, imageUrl, MLN]);
 
   const fetchUserData = async () => {
     try {
@@ -78,6 +82,8 @@ const EditProfile = () => {
         setGender(doctorData.gender || "");
         setCity(doctorData.city || "");
         setUrl(doctorData.imageUrl || "");
+        setMLN(doctorData.MLN || "");
+        setDoctor(true);
       } else {
         Alert.alert("No data available");
       }
@@ -101,7 +107,8 @@ const EditProfile = () => {
         newBirthday === birthday &&
         newGender === gender &&
         newCity === city &&
-        newImageUrl === imageUrl
+        newImageUrl === imageUrl&&
+        newMLN === MLN
       ) {
         Alert.alert("No data available to update");
         return;
@@ -135,6 +142,7 @@ const EditProfile = () => {
             gender: newGender,
             city: newCity,
             imageUrl: newImageUrl,
+            MLN: newMLN,
           });
         } else {
           Alert.alert("No data available");
@@ -178,6 +186,19 @@ const EditProfile = () => {
                 Please enter a valid phone number format (10 digit).
               </Text>
             )}
+            {doctor === true ? (
+              <>
+                <Text style={styles.inputTitle}>Medical License Number</Text>
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder={MLN}
+                  style={styles.inputField}
+                  value={newMLN}
+                  onChangeText={setNewMLN}
+                  keyboardType="phone-pad"
+                />
+              </>
+            ) : null}
             <Text style={styles.inputTitle}>Birthday</Text>
             <TextInput
               autoCapitalize="none"

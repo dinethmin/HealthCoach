@@ -11,7 +11,6 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
-import { Link } from "expo-router";
 import { defaultStyles } from "../constants/Styles";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
