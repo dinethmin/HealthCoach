@@ -103,18 +103,28 @@ export default function TabOneScreen() {
             <Text style={styles.profileSubTitle}>Prediction History</Text>
           </TouchableOpacity>
         </Link>
-        <TouchableOpacity style={styles.itemContainer}>
-          <LottieView
-            source={{
-              uri: "https://lottie.host/b6e43384-c126-45df-b70b-7601f63b2c76/MseuYfW2cZ.json",
-            }}
-            autoPlay
-            loop
-            speed={0.5}
-            style={{ width: 70, height: 70 }}
-          />
-          <Text style={styles.profileSubTitle}>Health analysis</Text>
-        </TouchableOpacity>
+        <Link
+          href={{
+            pathname: "/HealthAnalysis",
+            params: {
+              type: "page",
+            },
+          }}
+          asChild
+        >
+          <TouchableOpacity style={styles.itemContainer}>
+            <LottieView
+              source={{
+                uri: "https://lottie.host/b6e43384-c126-45df-b70b-7601f63b2c76/MseuYfW2cZ.json",
+              }}
+              autoPlay
+              loop
+              speed={0.5}
+              style={{ width: 70, height: 70 }}
+            />
+            <Text style={styles.profileSubTitle}>Health analysis</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
       <View style={styles.itemCardContainer2}>
         {doctor === true ? (

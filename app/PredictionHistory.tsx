@@ -43,7 +43,7 @@ const PredictionHistory = () => {
           })
         );
 
-        // Sort by newest first
+        // Sort by newest
         predictionsArray.sort(
           (a, b) =>
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
