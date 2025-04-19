@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { get, ref, child, update } from "firebase/database";
+import { get, ref, child, update, set } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { useEffect } from "react";
@@ -20,30 +20,33 @@ import { ColorPalette } from "@/constants/Colors";
 
 const DoctorProfile = () => {
   const [name, setName] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState("");
-  const [city, setCity] = useState("");
-  const [imageUrl, setUrl] = useState("");
+  const [MC, setMC] = useState("");
+  const [YoExp, setYoExp] = useState("");
+  const [Workplace, setWorkplace] = useState("");
+  const [EmergencyContact, setEmergencyContact] = useState("");
+  const [MLN, setMLN] = useState("");
   //updated
   const [newName, setNewName] = useState("");
-  const [newBirthday, setNewBirthday] = useState("");
-  const [newPhone, setNewPhone] = useState("");
-  const [newGender, setNewGender] = useState("");
-  const [newCity, setNewCity] = useState("");
-  const [newImageUrl, setNewUrl] = useState("");
+  const [newMC, setNewMC] = useState("");
+  const [newYoExp, setNewYoExp] = useState("");
+  const [newWorkplace, setNewWorkplace] = useState("");
+  const [newEmergencyContact, setNewEmergencyContact] = useState("");
+  const [newMLN, setNewMLN] = useState("");
+
+  const auth = FIREBASE_AUTH;
+
   useEffect(() => {
     fetchUserData();
   }, []);
 
   useEffect(() => {
     setNewName(name);
-    setNewBirthday(birthday);
-    setNewPhone(phone);
-    setNewGender(gender);
-    setNewCity(city);
-    setNewUrl(imageUrl);
-  }, [name, birthday, phone, gender, city, imageUrl]);
+    setNewMC(MC);
+    setNewYoExp(YoExp);
+    setNewWorkplace(Workplace);
+    setNewEmergencyContact(EmergencyContact);
+    setNewMLN(MLN);
+  }, [name, MC, YoExp, Workplace, EmergencyContact, MLN]);
 
   const fetchUserData = async () => {
     try {
@@ -56,27 +59,23 @@ const DoctorProfile = () => {
       const userId = FIREBASE_AUTH.currentUser?.uid;
       const dbRef = ref(FIREBASE_Database);
 
-      const snapshot1 = await get(child(dbRef, `users/${userId}`));
+      const snapshot1 = await get(child(dbRef, `doctordetails/${userId}`));
       const snapshot2 = await get(child(dbRef, `doctor/${userId}`));
 
       if (snapshot1.exists()) {
-        const userData = snapshot1.val();
+        const doctorData = snapshot1.val();
 
-        setName(userData.name || "");
-        setBirthday(userData.birthday || "");
-        setPhone(userData.phone || "");
-        setGender(userData.gender || "");
-        setCity(userData.city || "");
-        setUrl(userData.imageUrl || "");
+        setName(doctorData.name || "");
+        setMLN(doctorData.MLN || "");
+        setMC(doctorData.MC || "");
+        setWorkplace(doctorData.Workplace || "");
+        setYoExp(doctorData.YoExp || "");
+        setEmergencyContact(doctorData.EmergencyContact || "");
       } else if (snapshot2.exists()) {
         const doctorData = snapshot2.val();
 
         setName(doctorData.name || "");
-        setBirthday(doctorData.birthday || "");
-        setPhone(doctorData.phone || "");
-        setGender(doctorData.gender || "");
-        setCity(doctorData.city || "");
-        setUrl(doctorData.imageUrl || "");
+        setMLN(doctorData.MLN || "");
       } else {
         Alert.alert("No data available");
       }
@@ -85,64 +84,46 @@ const DoctorProfile = () => {
     }
   };
 
-  const updateUserData = async () => {
-    try {
-      const user = FIREBASE_AUTH.currentUser;
-      if (!user) {
-        console.warn("No user logged in");
-        return;
-      }
-
-      // Check if any update is avalable before updating
-      if (
-        newName === name &&
-        newPhone === phone &&
-        newBirthday === birthday &&
-        newGender === gender &&
-        newCity === city &&
-        newImageUrl === imageUrl
-      ) {
-        Alert.alert("No data available to update");
-        return;
-      }
-
-      if (user) {
-        const userId = FIREBASE_AUTH.currentUser?.uid;
-        const dbRef = ref(FIREBASE_Database);
-
-        const snapshot1 = await get(child(dbRef, `users/${userId}`));
-        const snapshot2 = await get(child(dbRef, `doctor/${userId}`));
-
-        if (snapshot1.exists()) {
-          const userRef = ref(FIREBASE_Database, `users/${userId}`);
-
-          await update(userRef, {
-            name: newName,
-            phone: newPhone,
-            birthday: newBirthday,
-            gender: newGender,
-            city: newCity,
-            imageUrl: newImageUrl,
-          });
-        } else if (snapshot2.exists()) {
-          const doctorRef = ref(FIREBASE_Database, `doctor/${userId}`);
-
-          await update(doctorRef, {
-            name: newName,
-            phone: newPhone,
-            birthday: newBirthday,
-            gender: newGender,
-            city: newCity,
-            imageUrl: newImageUrl,
-          });
-        } else {
-          Alert.alert("No data available");
-        }
-        Alert.alert("Success", "Your profile has been updated!");
-      }
-    } catch (error) {
-      console.error("Error updating user data:", error);
+  const saveUserData = () => {
+    if (
+      !name ||
+      !MLN ||
+      !newMC ||
+      !newYoExp ||
+      !newWorkplace ||
+      !newEmergencyContact
+    ) {
+      Alert.alert("All fields are required!");
+      return;
     }
+
+    setMC(newMC);
+    setEmergencyContact(newEmergencyContact);
+    setYoExp(newYoExp);
+    setWorkplace(newWorkplace);
+
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      Alert.alert("User ID not found");
+      return;
+    }
+
+    set(ref(FIREBASE_Database, "doctordetails/" + userId), {
+      name,
+      MLN,
+      MC: newMC,
+      YoExp: newYoExp,
+      Workplace: newWorkplace,
+      EmergencyContact: newEmergencyContact,
+    })
+      .then(() => {
+        Alert.alert("Doctor Details saved successfully!");
+      })
+      .catch((error) => {
+        console.error("Error saving user data: ", error);
+        Alert.alert("Error saving data");
+      });
   };
 
   return (
@@ -159,74 +140,56 @@ const DoctorProfile = () => {
             <TextInput
               autoCapitalize="words"
               placeholder={name}
-              style={styles.inputField}
-              value={newName}
-              onChangeText={setNewName}
+              style={styles.inputFieldS}
+              value={name}
+              editable={false}
             />
-            <Text style={styles.inputTitle}>Phone</Text>
+            <Text style={styles.inputTitle}>Medical License Number</Text>
+            <TextInput
+              autoCapitalize="characters"
+              placeholder={MLN}
+              style={styles.inputFieldS}
+              value={MLN}
+              editable={false}
+            />
+            <Text style={styles.inputTitle}>
+              Medical Council / Registration Authority
+            </Text>
+            <TextInput
+              autoCapitalize="characters"
+              placeholder={MC}
+              style={styles.inputField}
+              value={newMC}
+              onChangeText={setNewMC}
+            />
+            <Text style={styles.inputTitle}>Years of Experience</Text>
             <TextInput
               autoCapitalize="none"
-              placeholder={phone}
+              placeholder={newYoExp}
               style={styles.inputField}
-              value={newPhone}
-              onChangeText={setNewPhone}
+              value={newYoExp}
+              onChangeText={setNewYoExp}
+              keyboardType="number-pad"
+            />
+            <Text style={styles.inputTitle}>Workplace / Hospital Name</Text>
+            <TextInput
+              autoCapitalize="words"
+              placeholder={Workplace}
+              style={styles.inputField}
+              value={newWorkplace}
+              onChangeText={setNewWorkplace}
+            />
+            <Text style={styles.inputTitle}>Emergency Contact</Text>
+            <TextInput
+              autoCapitalize="none"
+              placeholder={EmergencyContact}
+              style={styles.inputField}
+              value={newEmergencyContact}
+              onChangeText={setNewEmergencyContact}
               keyboardType="phone-pad"
             />
-            {phone && !/^[0-9]{10}$/.test(newPhone) && (
-              <Text style={styles.errorText}>
-                Please enter a valid phone number format (10 digit).
-              </Text>
-            )}
-            <Text style={styles.inputTitle}>Birthday</Text>
-            <TextInput
-              autoCapitalize="none"
-              placeholder={birthday}
-              style={styles.inputField}
-              value={newBirthday}
-              onChangeText={setNewBirthday}
-            />
-            {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(newBirthday) && (
-              <Text style={styles.errorText}>
-                Please enter a valid date format (DD/MM/YYYY).
-              </Text>
-            )}
-            <Text style={styles.inputTitle}>Gender</Text>
-            <TextInput
-              autoCapitalize="words"
-              placeholder={newGender}
-              style={styles.inputField}
-              value={newGender}
-              onChangeText={setNewGender}
-            />
-            {gender &&
-              !["Male", "Female", "Non-binary", "Other"].includes(
-                newGender
-              ) && (
-                <Text style={styles.errorText}>
-                  Please enter a valid gender (Male, Female, Non-binary).
-                </Text>
-              )}
-            <Text style={styles.inputTitle}>City</Text>
-            <TextInput
-              autoCapitalize="words"
-              placeholder={city}
-              style={styles.inputField}
-              value={newCity}
-              onChangeText={setNewCity}
-            />
-            <Text style={styles.inputTitle}>Profile Image</Text>
-            <TextInput
-              autoCapitalize="none"
-              placeholder={imageUrl}
-              style={styles.inputField}
-              value={newImageUrl}
-              onChangeText={setNewUrl}
-            />
-            <Text style={styles.nomalText}>
-              Please enter a valid image url or don't change the url.
-            </Text>
             <View style={styles.btnContainer}>
-              <TouchableOpacity style={styles.btn} onPress={updateUserData}>
+              <TouchableOpacity style={styles.btn} onPress={saveUserData}>
                 <FontAwesome5
                   name="user-check"
                   style={styles.btnIcon}
@@ -277,6 +240,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 10,
     backgroundColor: "#fff",
+  },
+  inputFieldS: {
+    marginVertical: 4,
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 12,
+    padding: 10,
+    backgroundColor: ColorPalette.greyLight2,
   },
   errorText: {
     color: "red",

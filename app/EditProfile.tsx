@@ -107,7 +107,7 @@ const EditProfile = () => {
         newBirthday === birthday &&
         newGender === gender &&
         newCity === city &&
-        newImageUrl === imageUrl&&
+        newImageUrl === imageUrl &&
         newMLN === MLN
       ) {
         Alert.alert("No data available to update");
@@ -120,6 +120,7 @@ const EditProfile = () => {
 
         const snapshot1 = await get(child(dbRef, `users/${userId}`));
         const snapshot2 = await get(child(dbRef, `doctor/${userId}`));
+        const snapshot3 = await get(child(dbRef, `doctordetails/${userId}`));
 
         if (snapshot1.exists()) {
           const userRef = ref(FIREBASE_Database, `users/${userId}`);
@@ -146,6 +147,15 @@ const EditProfile = () => {
           });
         } else {
           Alert.alert("No data available");
+        }
+        
+        if (snapshot3.exists()){
+          const doctorRef = ref(FIREBASE_Database, `doctordetails/${userId}`);
+
+          await update(doctorRef, {
+            name: newName,
+            MLN: newMLN,
+          });
         }
         Alert.alert("Success", "Your profile has been updated!");
       }
@@ -195,7 +205,6 @@ const EditProfile = () => {
                   style={styles.inputField}
                   value={newMLN}
                   onChangeText={setNewMLN}
-                  keyboardType="phone-pad"
                 />
               </>
             ) : null}
