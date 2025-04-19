@@ -81,18 +81,28 @@ export default function TabOneScreen() {
           />
           <Text style={styles.profileSubTitle}>Chat</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemContainer}>
-          <LottieView
-            source={{
-              uri: "https://lottie.host/da19275e-76d1-47b6-837c-662ba8c92100/bJlij7YC5C.json",
-            }}
-            autoPlay
-            loop
-            speed={0.5}
-            style={{ width: 70, height: 70 }}
-          />
-          <Text style={styles.profileSubTitle}>Prediction History</Text>
-        </TouchableOpacity>
+        <Link
+          href={{
+            pathname: "/PredictionHistory",
+            params: {
+              type: "page",
+            },
+          }}
+          asChild
+        >
+          <TouchableOpacity style={styles.itemContainer}>
+            <LottieView
+              source={{
+                uri: "https://lottie.host/da19275e-76d1-47b6-837c-662ba8c92100/bJlij7YC5C.json",
+              }}
+              autoPlay
+              loop
+              speed={0.5}
+              style={{ width: 70, height: 70 }}
+            />
+            <Text style={styles.profileSubTitle}>Prediction History</Text>
+          </TouchableOpacity>
+        </Link>
         <TouchableOpacity style={styles.itemContainer}>
           <LottieView
             source={{

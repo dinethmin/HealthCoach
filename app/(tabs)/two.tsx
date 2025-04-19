@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
 import { Text, View } from "@/components/Themed";
 import Checkbox from "expo-checkbox";
@@ -35,6 +35,40 @@ export default function TabTwoScreen() {
     predicted_disease: string;
     probabilities: Record<string, number>;
   } | null>(null);
+  const [city, setCity] = useState("");
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const user = FIREBASE_AUTH.currentUser;
+      if (!user) {
+        console.warn("No user logged in");
+        return;
+      }
+
+      const userId = FIREBASE_AUTH.currentUser?.uid;
+      const dbRef = ref(FIREBASE_Database);
+
+      const snapshot1 = await get(child(dbRef, `users/${userId}`));
+      const snapshot2 = await get(child(dbRef, `doctor/${userId}`));
+      if (snapshot1.exists()) {
+        const userData = snapshot1.val();
+
+        setCity(userData.city || "");
+      } else if (snapshot2.exists()) {
+        const doctorData = snapshot2.val();
+
+        setCity(doctorData.city || "");
+      } else {
+        setCity("Unknown");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleSelectSymptom = (symptom: string) => {
     setSelectedSymptoms((prev) => {
@@ -85,8 +119,6 @@ export default function TabTwoScreen() {
       // Get user's city from Firebase Database
       const userId = FIREBASE_AUTH.currentUser?.uid;
       const dbRef = ref(FIREBASE_Database);
-      const snapshot = await get(child(dbRef, `users/${userId}`));
-      const city = snapshot.exists() && snapshot.val().city ? snapshot.val().city : "Unknown";
 
       // Save prediction data to Firebase Database
       const predictionRef = ref(FIREBASE_Database, `predictions/${userId}`);
