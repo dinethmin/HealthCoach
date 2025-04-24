@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { Text, View } from "@/components/Themed";
 import Checkbox from "expo-checkbox";
 import axios from "axios";
@@ -7,6 +14,8 @@ import { ColorPalette } from "@/constants/Colors";
 import { ref, push, get, child } from "firebase/database";
 import { FIREBASE_Database } from "../../FirebaseConfig";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import LottieView from "lottie-react-native";
+import { Link } from "expo-router";
 
 const symptomsList = [
   "Vomiting",
@@ -31,6 +40,7 @@ const symptomsList = [
 export default function TabTwoScreen() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [isVisible, setIsVisible] = useState(true); //This is to control the visibility of the 'Get Prediction' button
+  const [loading, setLoading] = useState(false);
   const [prediction, setPrediction] = useState<{
     predicted_disease: string;
     probabilities: Record<string, number>;
@@ -94,6 +104,8 @@ export default function TabTwoScreen() {
       );
       return;
     }
+    if (loading) return;
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -118,7 +130,6 @@ export default function TabTwoScreen() {
 
       // Get user's city from Firebase Database
       const userId = FIREBASE_AUTH.currentUser?.uid;
-      const dbRef = ref(FIREBASE_Database);
 
       // Save prediction data to Firebase Database
       const predictionRef = ref(FIREBASE_Database, `predictions/${userId}`);
@@ -137,8 +148,30 @@ export default function TabTwoScreen() {
         "Error",
         "There was an issue fetching the prediction. Please try again later."
       );
+    } finally {
+      setLoading(false);
     }
   };
+
+  const test = () => {
+    interface PredictionData {
+      predicted_disease: string;
+      probabilities: Record<string, number>;
+    }
+
+    const predictionData: PredictionData = {
+      predicted_disease: "Flu",
+      probabilities: {
+      Flu: 78.5,
+      Cold: 15.2,
+      COVID: 6.3,
+      },
+    };
+
+    setPrediction(predictionData);
+    setIsVisible(false);
+    
+  }
 
   return (
     <View style={styles.container}>
@@ -159,7 +192,11 @@ export default function TabTwoScreen() {
       <Button title="Cear All" onPress={handleClearSelection} />
       <View style={styles.br} />
       {isVisible && (
-        <Button title="Get Prediction" onPress={handleGetPrediction} />
+        <Button
+          title={loading ? "Loading..." : "Get Prediction"}
+          onPress={test}
+          disabled={loading}
+        />
       )}
 
       {prediction && (
@@ -176,6 +213,29 @@ export default function TabTwoScreen() {
                 {disease}: {probability}%
               </Text>
             ))}
+          <View style={{ height: 15, backgroundColor: "transparent" }} />
+          <Link
+            href={{
+              pathname: "/MoreDetails",
+              params: {
+                disease: prediction.predicted_disease,
+              },
+            }}
+            asChild
+          >
+            <TouchableOpacity style={styles.itemContainer}>
+              <LottieView
+                source={{
+                  uri: "https://lottie.host/430405b9-5254-4002-a915-bb23bf7db3d3/ftffN9lVSV.json",
+                }}
+                autoPlay
+                loop
+                speed={0.5}
+                style={{ width: 50, height: 50 }}
+              />
+              <Text style={styles.profileSubTitle}>Get More Details</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
       )}
     </View>
@@ -227,5 +287,21 @@ const styles = StyleSheet.create({
   br: {
     height: 4,
     backgroundColor: "transparent",
+  },
+  itemContainer: {
+    backgroundColor: ColorPalette.blue2,
+    flexDirection: "row",
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 2,
+    margin: 0,
+    borderRadius: 40,
+    width: "80%",
+  },
+  profileSubTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "black",
   },
 });
