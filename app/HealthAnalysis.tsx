@@ -1,13 +1,9 @@
 import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from "react-native";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { child, get, ref } from "firebase/database";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useFocusEffect } from "expo-router";
-import LottieView from "lottie-react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import {useEffect, useState } from "react";
 import { ColorPalette } from "@/constants/Colors";
 
 const HealthAnalysis = () => {
