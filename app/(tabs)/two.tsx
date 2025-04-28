@@ -160,7 +160,7 @@ export default function TabTwoScreen() {
     }
 
     const predictionData: PredictionData = {
-      predicted_disease: "FLU",
+      predicted_disease: "COLD",
       probabilities: {
       FLU: 78.5,
       COLD: 15.2,
