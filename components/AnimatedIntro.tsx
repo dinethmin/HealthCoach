@@ -15,29 +15,54 @@ import { ReText } from 'react-native-redash';
 
 const content = [
   {
-    title: "Let's create.",
-    bg: ColorPalette.lime,
-    fontColor: ColorPalette.pink,
-  },
-  {
-    title: "Let's brainstorm.",
-    bg: ColorPalette.brown,
-    fontColor: ColorPalette.sky,
-  },
-  {
-    title: "Let's discover.",
-    bg: ColorPalette.orange,
-    fontColor: ColorPalette.blue,
-  },
-  {
-    title: "Let's go.",
+    title: "Track symptoms.",
     bg: ColorPalette.teal,
+    fontColor: ColorPalette.white,
+  },
+  {
+    title: "Stay informed.",
+    bg: ColorPalette.blue2,
     fontColor: ColorPalette.yellow,
   },
   {
-    title: 'GroqGPT.',
+    title: "Predict early.",
     bg: ColorPalette.green,
     fontColor: ColorPalette.pink,
+  },
+  {
+    title: "Act on time.",
+    bg: ColorPalette.orange,
+    fontColor: ColorPalette.white,
+  },
+  {
+    title: "Your health matters.",
+    bg: ColorPalette.green,
+    fontColor: ColorPalette.sky,
+  },
+  {
+    title: "Monitor. Prevent.",
+    bg: ColorPalette.brown,
+    fontColor: ColorPalette.lime,
+  },
+  {
+    title: "Stay one step ahead.",
+    bg: ColorPalette.teal,
+    fontColor: ColorPalette.cyan,
+  },
+  {
+    title: "Be health smart.",
+    bg: ColorPalette.darkBlue,
+    fontColor: ColorPalette.gold,
+  },
+  {
+    title: "Health Coach",
+    bg: ColorPalette.lime,
+    fontColor: ColorPalette.blue,
+  },
+  {
+    title: "Your Companion.",
+    bg: ColorPalette.lime,
+    fontColor: ColorPalette.blue,
   },
 ];
 
