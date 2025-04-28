@@ -102,7 +102,9 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     marginBottom: 20,
-    backgroundColor: ColorPalette.light,
+    backgroundColor: "transparent",
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   topTitle: {
     fontSize: 24,
