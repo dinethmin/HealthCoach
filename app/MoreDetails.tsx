@@ -331,7 +331,7 @@ const MoreDetails = () => {
 
       {disease === "COLD" && (
         <ScrollView style={styles.container}>
-          <Text style={styles.sectionTitle}>Symptoms Cold</Text>
+          <Text style={styles.sectionTitle}>Symptoms</Text>
           <Text style={styles.paragraph}>
             Symptoms of a common cold may include throat pain and sensitivity,
             sneezing, runny or stuffy nose, low-grade fever, headache, muscle
@@ -623,64 +623,221 @@ const MoreDetails = () => {
 
       {disease === "COVID" && (
         <ScrollView style={styles.container}>
-          <Text style={styles.sectionTitle}>Symptoms COVID</Text>
+          <Text style={styles.sectionTitle}>Symptoms</Text>
           <Text style={styles.paragraph}>
-            Fever, sore throat, runny nose, headache, muscle aches, cough,
-            tiredness
+            Fever, Coughing, Shortness of breath, Trouble breathing, Fatigue,
+            Chills sometimes with shaking, Body aches, Headache, Sore throat,
+            Congestion/runny nose, Loss of smell or taste, Nausea, and Diarrhea.
           </Text>
-          <Text style={styles.link}>More About Flu Symptoms &gt;</Text>
 
           <Text style={styles.sectionTitle}>Overview</Text>
           <Text style={styles.paragraph}>
-            The flu is a respiratory tract infection caused by the influenza
-            virus. Flu symptoms include fever, sore throat, runny nose,
-            headache, cough, muscle aches, and fatigue. The flu spreads easily
-            from person to person. Most people recover at home with rest and
-            over-the-counter medications, but for some people flu can be severe.
+            COVID-19, also known as the coronavirus disease 2019, is an
+            infectious disease caused by the SARS-CoV-2 virus. It primarily
+            spreads through respiratory droplets when an infected person coughs,
+            sneezes, or talks. It can also spread by touching surfaces
+            contaminated with the virus and then touching the face.
           </Text>
-          <Text style={styles.link}>Read more &gt;</Text>
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                "https://www.who.int/health-topics/coronavirus#tab=tab_1"
+              )
+            }
+          >
+            <Text style={styles.link}>Read more &gt;</Text>
+          </TouchableOpacity>
 
-          <Text style={styles.sectionTitle}>What Happens with the Flu</Text>
+          <Text style={styles.sectionTitle}>How It Spreads</Text>
           <Text style={styles.paragraph}>
-            After being infected, symptoms may appear within 1 to 4 days. The
-            virus attacks the respiratory system, leading to inflammation, body
-            aches, and fatigue. Most people recover in about a week, but
-            complications can occur in vulnerable individuals.
+            COVID-19 spreads from person to person, mostly through:
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Close contact with infected individuals.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Inhaling respiratory droplets from coughing, sneezing, or talking.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Touching surfaces contaminated by the virus and then touching the
+            mouth, nose, or eyes.
           </Text>
 
           <Text style={styles.sectionTitle}>Treatment</Text>
           <Text style={styles.paragraph}>
-            The flu usually gets better on its own in one to two weeks with
-            rest. Antihistamines, decongestants, pain relievers, drinking plenty
-            of fluids, and inhaling steam may help ease symptoms. For people at
-            risk for complications and those with severe symptoms, antiviral
-            medications such as oseltamivir (Tamiflu), baloxavir (Xofluza),
-            peramivir (Rapivab), or zanamivir (Relenza) may help reduce the
-            duration of symptoms, shorten the illness, and prevent complications
-            if taken early.
+            There is currently no specific antiviral treatment for COVID-19, but
+            treatments are available to help manage symptoms. Hospitalization
+            may be required for severe cases, particularly for those with
+            breathing difficulties or pneumonia.
           </Text>
-          <Text style={styles.link}>
-            Which Treatments are Effective for the Flu? &gt;
+
+          <Text style={styles.sectionTitle}>
+            What to Do if You Have Symptoms
+          </Text>
+          <Text style={styles.paragraph}>
+            If you are experiencing symptoms of COVID-19, it is recommended to:
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Stay Home: Isolate yourself to prevent spreading the virus.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Get Tested: Schedule a test to confirm whether or not you have
+            COVID-19.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Monitor Your Symptoms: If symptoms worsen, seek medical attention
+            immediately.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            Follow Public Health Guidelines: Adhere to local health protocols
+            regarding quarantine or isolation.
           </Text>
 
           <Text style={styles.sectionTitle}>Prevention</Text>
-          <Text style={styles.paragraph}>
-            Wash your hands frequently, avoid close contact with sick people,
-            stay home when you’re sick, and get a flu vaccine every year.
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            <Text style={{ fontWeight: "500" }}>Vaccination</Text> Getting
+            vaccinated is one of the most effective ways to reduce the risk of
+            severe illness, hospitalization, and death from COVID-19.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            <Text style={{ fontWeight: "500" }}>Mask-Wearing</Text> Wearing a
+            mask in crowded places or in areas of high transmission can help
+            reduce the spread of the virus.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            <Text style={{ fontWeight: "500" }}>Social Distancing</Text>{" "}
+            Maintain at least 6 feet of distance from others, particularly in
+            crowded or indoor settings.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            <Text style={{ fontWeight: "500" }}>Hand Hygiene</Text> Wash hands
+            frequently with soap and water for at least 20 seconds or use hand
+            sanitizer with at least 60% alcohol.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            <Text style={{ fontWeight: "500" }}>
+              Avoid Touching Your Face
+            </Text>{" "}
+            Avoid touching your eyes, nose, and mouth with your unwashed hands.
+          </Text>
+          <Text style={styles.bulletPoint4}>
+            <Entypo name="dot-single" size={16} color="black" />
+            <Text style={{ fontWeight: "500" }}>
+              Disinfecting Surfaces
+            </Text>{" "}
+            Clean frequently touched surfaces like doorknobs, light switches,
+            and phones regularly.
           </Text>
 
           <Text style={styles.sectionTitle}>When to See a Doctor</Text>
           <Text style={styles.paragraph}>
-            Seek medical attention if your symptoms worsen, you have trouble
-            breathing, chest pain, or a persistent high fever, especially if
-            you're in a high-risk group like children, the elderly, or those
-            with chronic health conditions.
+            <Text style={{ fontWeight: "bold" }}>Don’t wait.</Text> It’s
+            important to get tested quickly if you have symptoms of COVID.
           </Text>
+          <Text style={styles.paragraph}>
+            <Text style={{ fontWeight: "bold" }}>At-Risk Groups</Text> Older
+            adults (ages 65 and older), People with underlying health conditions
+            such as diabetes, heart disease, or respiratory illnesses, and
+            Pregnant women. Seek immediate medical care if you experience:
+          </Text>
+          <View
+            style={{
+              justifyContent: "center",
+              gap: 5,
+              backgroundColor: ColorPalette.greyLight2,
+              borderRadius: 20,
+              padding: 10,
+              paddingLeft: 15,
+            }}
+          >
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Difficulty
+              breathing or shortness of breath
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Persistent
+              chest pain or pressure
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Confusion or
+              inability to stay awake
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Pale, gray,
+              or blue-colored skin, lips, or nail beds: Changes in skin color
+              that suggest a lack of oxygen.
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> A sudden or
+              new onset of confusion or disorientation.
+            </Text>
+          </View>
 
           <Text style={styles.sectionTitle}>How Long Does It Last?</Text>
+          <Text style={styles.paragraphTitle}>Mild Cases</Text>
           <Text style={styles.paragraph}>
-            Symptoms typically last 5–7 days, but fatigue and cough may linger
-            for several more days.
+            For individuals with mild symptoms, the illness usually lasts
+            between 7 to 14 days. Most people will begin to feel better after
+            the first few days, though some may experience lingering symptoms,
+            such as fatigue or a cough, for several weeks.
+          </Text>
+          <Text style={styles.paragraphTitle}>Severe Cases</Text>
+          <Text style={styles.paragraph}>
+            In more severe cases, especially for those requiring
+            hospitalization, the illness can last several weeks to months.
+            People with severe symptoms may experience ongoing complications,
+            including damage to the lungs, heart, or other organs.
+          </Text>
+          <Text style={styles.paragraphTitle}>Long COVID</Text>
+          <Text style={styles.paragraph}>
+            Some individuals may experience lingering effects even after they
+            have recovered from the acute phase of the illness. This is known as
+            Long COVID or Post-COVID Conditions, and it can last for weeks or
+            months. Common symptoms of Long COVID include:
+          </Text>
+          <View
+            style={{
+              justifyContent: "center",
+              backgroundColor: "transparent",
+              paddingLeft: 15,
+            }}
+          >
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Extreme
+              fatigue
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Shortness of
+              breath
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Joint pain
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Brain fog
+            </Text>
+            <Text style={styles.bulletPoint1}>
+              <Octicons name="dot-fill" size={14} color="black" /> Difficulty
+              concentrating
+            </Text>
+          </View>
+          <Text style={styles.paragraphTitle}>Recovery Time</Text>
+          <Text style={styles.paragraph}>
+            Recovery time can vary based on the severity of the infection, with
+            people recovering in about 2 weeks for mild cases but potentially
+            taking 4-6 weeks or longer for severe cases.
           </Text>
         </ScrollView>
       )}
@@ -735,6 +892,15 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: "black",
   },
+  paragraphTitle: {
+    fontSize: 16,
+    color: "#333",
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 10,
+    lineHeight: 24,
+    textAlign: "justify",
+  },
   paragraph: {
     fontSize: 16,
     color: "#333",
@@ -754,6 +920,14 @@ const styles = StyleSheet.create({
     color: "#333",
     flexDirection: "row",
   },
+  bulletPoint1: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginVertical: 6,
+    color: "#333",
+    flexDirection: "row",
+    textAlign: "justify",
+  },
   bulletPoint2: {
     fontSize: 15,
     color: "#333",
@@ -763,6 +937,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#333",
     lineHeight: 22,
+    textAlign: "justify",
+  },
+  bulletPoint4: {
+    fontSize: 16,
+    color: "#333",
+    lineHeight: 24,
+    marginBottom: 5,
     textAlign: "justify",
   },
   tableContainer: {
