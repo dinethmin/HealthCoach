@@ -1,4 +1,10 @@
-import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { Text, View } from "@/components/Themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
@@ -6,7 +12,7 @@ import { child, get, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { ColorPalette } from "@/constants/Colors";
 import { BarChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
+import { PieChart } from "react-native-chart-kit";
 
 const HealthAnalysis = () => {
   const [error, setError] = useState("");
@@ -122,6 +128,26 @@ const HealthAnalysis = () => {
     {} as Record<string, Record<string, number>>
   );
 
+  const diseaseData = Object.entries(
+    viewMode === "personal"
+      ? userHistory.reduce((acc, item) => {
+          acc[item.predictedDisease] = (acc[item.predictedDisease] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>)
+      : stats.diseases
+  ).map(([disease, count], index) => ({
+    name: disease,
+    population: count,
+    color: getRandomColor(index),
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 15,
+  }));
+
+  function getRandomColor(index: number) {
+    const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#8BC34A", "#FF9800"];
+    return colors[index % colors.length];
+  }
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "white" }}
@@ -174,7 +200,7 @@ const HealthAnalysis = () => {
                 padding: 10,
               }}
             >
-              <Text style={styles.subTitle}>
+              <Text style={styles.topTitle}>
                 {viewMode === "personal"
                   ? "My Statistics"
                   : "Community Statistics"}
@@ -182,17 +208,41 @@ const HealthAnalysis = () => {
             </View>
             <View style={styles.itemCardContainer}>
               <TouchableOpacity
-                style={styles.itemContainer2}
+                style={[
+                  styles.itemContainer2,
+                  {
+                    backgroundColor:
+                      viewMode === "personal"
+                        ? "#2196F3"
+                        : ColorPalette.lightBlue,
+                  },
+                ]}
                 onPress={() => setViewMode("personal")}
               >
-                <Text style={styles.profileSubTitle}>My Stats</Text>
+                <Text
+                  style={{ color: viewMode === "personal" ? "#fff" : "#000" }}
+                >
+                  My Stats
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.itemContainer2}
+                style={[
+                  styles.itemContainer2,
+                  {
+                    backgroundColor:
+                      viewMode === "global"
+                        ? "#2196F3"
+                        : ColorPalette.lightBlue,
+                  },
+                ]}
                 onPress={() => setViewMode("global")}
               >
-                <Text style={styles.profileSubTitle}>Community Stats</Text>
+                <Text
+                  style={{ color: viewMode === "global" ? "#fff" : "#000" }}
+                >
+                  Community Stats
+                </Text>
               </TouchableOpacity>
             </View>
             <View
@@ -203,50 +253,90 @@ const HealthAnalysis = () => {
               }}
             >
               {viewMode === "personal" ? (
-                <Text style={{ fontSize: 18, color: "black", paddingTop: 20 }}>
-                  My Total Predictions Count:{" "}
-                  <Text
+                <View style={{ backgroundColor: "transparent" }}>
+                  <View
                     style={{
-                      fontSize: 18,
-                      color: "black",
-                      paddingTop: 20,
-                      fontWeight: "bold",
+                      backgroundColor: "transparent",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    {userHistory.length}
-                  </Text>
-                </Text>
+                    <Text
+                      style={{ fontSize: 18, color: "black", paddingTop: 20 }}
+                    >
+                      My Total Predictions Count
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "black",
+                        paddingTop: 10,
+                        paddingBottom: 20,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {userHistory.length}
+                    </Text>
+                  </View>
+
+                  <PieChart
+                    data={diseaseData}
+                    width={screenWidth}
+                    height={220}
+                    chartConfig={{
+                      backgroundColor: "transparent",
+                      backgroundGradientFrom: "#fff",
+                      backgroundGradientTo: "#fff",
+                      color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    }}
+                    accessor={"population"}
+                    backgroundColor={"transparent"}
+                    paddingLeft={"15"}
+                  />
+                </View>
               ) : (
-                <Text style={{ fontSize: 18, color: "black", paddingTop: 20 }}>
-                  Total Users Predictions count:{" "}
-                  <Text
+                <View style={{ backgroundColor: "transparent" }}>
+                  <View
                     style={{
-                      fontSize: 18,
-                      color: "black",
-                      paddingTop: 20,
-                      fontWeight: "bold",
+                      backgroundColor: "transparent",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    {stats.total}
-                  </Text>
-                </Text>
+                    <Text
+                      style={{ fontSize: 18, color: "black", paddingTop: 20 }}
+                    >
+                      Total Users Predictions count
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "black",
+                        paddingTop: 10,
+                        paddingBottom: 20,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {stats.total}
+                    </Text>
+                  </View>
+
+                  <PieChart
+                    data={diseaseData}
+                    width={screenWidth}
+                    height={220}
+                    chartConfig={{
+                      backgroundColor: "transparent",
+                      backgroundGradientFrom: "#fff",
+                      backgroundGradientTo: "#fff",
+                      color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    }}
+                    accessor={"population"}
+                    backgroundColor={"transparent"}
+                    paddingLeft={"15"}
+                  />
+                </View>
               )}
-              <Text style={{ fontSize: 18, color: "black", paddingTop: 20 }}>
-                Disease Breakdown
-              </Text>
-              {Object.entries(
-                viewMode === "personal"
-                  ? userHistory.reduce((acc, item) => {
-                      acc[item.predictedDisease] =
-                        (acc[item.predictedDisease] || 0) + 1;
-                      return acc;
-                    }, {} as Record<string, number>)
-                  : stats.diseases
-              ).map(([disease, count]) => (
-                <Text style={styles.topTitle} key={disease}>
-                  {disease}: {count as number}
-                </Text>
-              ))}
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
           </ScrollView>
@@ -259,78 +349,60 @@ const HealthAnalysis = () => {
           >
             <View
               style={{
-                backgroundColor: "transparent",
                 alignSelf: "center",
-                paddingTop: 20,
+                paddingTop: 5,
+                backgroundColor: "transparent",
               }}
             >
               <Text
                 style={{
                   fontSize: 30,
-                  color: "black",
                   fontWeight: "bold",
-                  marginBottom: 20,
+                  marginBottom: 10,
+                  color: "black",
+                  alignSelf: "center",
                 }}
               >
                 City-based Insights
               </Text>
 
               {Object.entries(diseaseCityStats).map(([disease, cities]) => (
-                <View
-                  style={{
-                    backgroundColor: "#f5f5f5",
-                    marginVertical: 10,
-                    marginHorizontal: 20,
-                    borderRadius: 10,
-                    padding: 15,
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 5,
-                    elevation: 3,
-                  }}
-                  key={disease}
-                >
-                  <Text
-                    style={{
-                      fontSize: 22,
-                      fontWeight: "bold",
-                      color: "#333",
-                      marginBottom: 10,
-                    }}
-                  >
-                    {disease}
-                  </Text>
+                <View style={styles.card} key={disease}>
+                  <Text style={styles.cardTitle}>{disease}</Text>
 
                   {Object.entries(cities as Record<string, number>)
                     .sort(([, aCount], [, bCount]) => bCount - aCount)
                     .map(([city, count]) => (
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginBottom: 5,
-                          backgroundColor: "transparent",
-                        }}
-                        key={city}
-                      >
-                        <Text style={{ fontSize: 16, color: "#555" }}>
-                          {city}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            color: "#888",
-                            marginLeft: 10,
+                      <View style={styles.cityRow} key={city}>
+                        <Text style={styles.cityName}>{city}</Text>
+                        <Text style={styles.cityCount}>({count})</Text>
+
+                        <BarChart
+                          data={{
+                            labels: [city],
+                            datasets: [{ data: [count] }],
                           }}
-                        >
-                          ({count})
-                        </Text>
+                          width={screenWidth - 180}
+                          height={100}
+                          fromZero
+                          yAxisLabel=""
+                          yAxisSuffix=""
+                          chartConfig={{
+                            backgroundColor: "#ffffff",
+                            backgroundGradientFrom: "#ffffff",
+                            backgroundGradientTo: "#c5c7ca",
+                            decimalPlaces: 0,
+                            color: (opacity = 1) =>
+                              `rgba(0, 0, 255, ${opacity})`,
+                            labelColor: (opacity = 1) =>
+                              `rgba(0, 0, 0, ${opacity})`,
+                          }}
+                          style={{ marginVertical: 8, borderRadius: 10 }}
+                        />
                       </View>
                     ))}
                 </View>
               ))}
-
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
           </ScrollView>
@@ -373,9 +445,8 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   scrollContainer: {
-    marginBottom: 20,
+    marginBottom: 120,
     backgroundColor: "transparent",
-    height: "100%",
   },
   subTitle: {
     fontSize: 14,
@@ -411,7 +482,6 @@ const styles = StyleSheet.create({
     width: "45%",
   },
   itemContainer2: {
-    backgroundColor: ColorPalette.lightBlue,
     width: "40%",
     alignItems: "center",
     justifyContent: "space-evenly",
@@ -425,6 +495,31 @@ const styles = StyleSheet.create({
     fontSize: 18,
     alignSelf: "center",
   },
+  card: {
+    backgroundColor: "#f5f5f5",
+    marginVertical: 10,
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+  },
+  cityRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+    backgroundColor: "transparent",
+  },
+  cityName: { fontSize: 16, color: "#555" },
+  cityCount: { fontSize: 12, color: "#888", marginRight: 5 },
 });
 
 export default HealthAnalysis;
