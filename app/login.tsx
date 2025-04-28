@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Link, useLocalSearchParams } from "expo-router";
+import { Image } from "react-native";
 import { defaultStyles } from "../constants/Styles";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import {
@@ -110,33 +111,56 @@ export default function LoginScreen() {
         </View>
       )}
 
-      <Text style={styles.title}>
-        {type === "login" ? (
-          <Text style={styles.title}>Login</Text>
-        ) : (
-          <View>
-            <Text style={styles.title}>Sign Up</Text>
-            <View style={styles.subContainer}>
-              <Text style={styles.subTitle}>
-                Are you a <Text style={{ color: "#55b39c" }}>Doctor? </Text>
-              </Text>
-              <Link
-                href={{
-                  pathname: "/DoctorSignUp",
-                  params: {
-                    type: "page",
-                  },
-                }}
-                asChild
-              >
-                <TouchableOpacity>
-                  <Text style={styles.subTitle2}>Sign up</Text>
-                </TouchableOpacity>
-              </Link>
-            </View>
+      {type === "login" ? (
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              margin: 0,
+            }}
+          >
+            <Image
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+              }}
+              resizeMode="contain"
+              source={require("../assets/images/Logo.png")}
+            />
           </View>
-        )}
-      </Text>
+          <View style={{ height: 5 }} />
+          <View style={styles.subContainer2}>
+            <Text style={styles.title1}>Login</Text>
+            <View style={{ height: 10 }} />
+            <Text style={styles.subTitle}>Welcome Back! </Text>
+            <Text style={styles.subTitle}>Log in to manage your health.</Text>
+          </View>
+        </View>
+      ) : (
+        <View>
+          <Text style={styles.title}>Sign Up</Text>
+          <View style={styles.subContainer}>
+            <Text style={styles.subTitle}>
+              Are you a <Text style={{ color: "#55b39c" }}>Doctor? </Text>
+            </Text>
+            <Link
+              href={{
+                pathname: "/DoctorSignUp",
+                params: {
+                  type: "page",
+                },
+              }}
+              asChild
+            >
+              <TouchableOpacity>
+                <Text style={styles.subTitle2}>Sign up</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </View>
+      )}
 
       <View style={{ marginBottom: 20 }}>
         {type === "login" ? (
@@ -259,6 +283,8 @@ const styles = StyleSheet.create({
   },
   subContainer2: {
     backgroundColor: "white",
+    flexDirection: "column",
+    paddingBottom: 40,
   },
   scrollContainer: {
     marginBottom: 80,
@@ -266,6 +292,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
+    alignSelf: "center",
+    fontWeight: "bold",
+  },
+  title1: {
+    fontSize: 40,
     alignSelf: "center",
     fontWeight: "bold",
   },

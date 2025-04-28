@@ -20,6 +20,7 @@ export default {
 
 export const ColorPalette = {
   primary: '#20AB6E',
+  white: '#FFFFFF',
   lime: '#D7FFD4',
   pink: '#F655FF',
   brown: '#29271D',
@@ -30,6 +31,7 @@ export const ColorPalette = {
   blue: '#0000FA',
   blue2: '#4663dd',
   lightBlue:'#84ace5',
+  darkBlue: '#0E4D45',
   purple: '#A500FF',
   green: '#172E15',
   light: '#FFFCFF',
@@ -41,4 +43,7 @@ export const ColorPalette = {
   input: '#EEE9F0',
   selected: '#F7F2F9',
   dark: '#2F2D32',
+  red: '#FF0000',
+  cyan: '#00FFFF',
+  gold: '#FFD700',
 }

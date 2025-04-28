@@ -12,7 +12,6 @@ import React, { useState, useEffect } from "react";
 import { get, ref, child } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
-import { ColorPalette } from "@/constants/Colors";
 
 const PredictionHistory = () => {
   const [history, setHistory] = useState<any[]>([]);
