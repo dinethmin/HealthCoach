@@ -5,6 +5,8 @@ import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { child, get, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { ColorPalette } from "@/constants/Colors";
+import { BarChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
 
 const HealthAnalysis = () => {
   const [error, setError] = useState("");
@@ -17,6 +19,7 @@ const HealthAnalysis = () => {
   });
   const [activeSection, setActiveSection] = useState("summary");
   const [viewMode, setViewMode] = useState<"personal" | "global">("personal");
+  const screenWidth = Dimensions.get("window").width;
 
   useEffect(() => {
     fetchHistory();
@@ -301,7 +304,6 @@ const HealthAnalysis = () => {
 
                   {Object.entries(cities as Record<string, number>)
                     .sort(([, aCount], [, bCount]) => bCount - aCount)
-                    // .slice(0, 5) // Uncomment to show only top 5 cities
                     .map(([city, count]) => (
                       <View
                         style={{
