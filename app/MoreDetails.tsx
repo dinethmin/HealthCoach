@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
@@ -682,22 +681,25 @@ const MoreDetails = () => {
           </Text>
           <Text style={styles.bulletPoint4}>
             <Entypo name="dot-single" size={16} color="black" />
-            Stay Home: Isolate yourself to prevent spreading the virus.
+            <Text style={{ fontWeight: "500" }}>Stay Home</Text> Isolate
+            yourself to prevent spreading the virus.
           </Text>
           <Text style={styles.bulletPoint4}>
             <Entypo name="dot-single" size={16} color="black" />
-            Get Tested: Schedule a test to confirm whether or not you have
-            COVID-19.
+            <Text style={{ fontWeight: "500" }}>Get Tested</Text> Schedule a
+            test to confirm whether or not you have COVID-19.
           </Text>
           <Text style={styles.bulletPoint4}>
             <Entypo name="dot-single" size={16} color="black" />
-            Monitor Your Symptoms: If symptoms worsen, seek medical attention
-            immediately.
+            <Text style={{ fontWeight: "500" }}>Monitor Your Symptoms</Text> If
+            symptoms worsen, seek medical attention immediately.
           </Text>
           <Text style={styles.bulletPoint4}>
             <Entypo name="dot-single" size={16} color="black" />
-            Follow Public Health Guidelines: Adhere to local health protocols
-            regarding quarantine or isolation.
+            <Text style={{ fontWeight: "500" }}>
+              Follow Public Health Guidelines
+            </Text>{" "}
+            Adhere to local health protocols regarding quarantine or isolation.
           </Text>
 
           <Text style={styles.sectionTitle}>Prevention</Text>
