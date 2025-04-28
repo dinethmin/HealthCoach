@@ -3,7 +3,7 @@ import { Text, View } from "@/components/Themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { child, get, ref } from "firebase/database";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ColorPalette } from "@/constants/Colors";
 
 const HealthAnalysis = () => {
@@ -127,14 +127,20 @@ const HealthAnalysis = () => {
       <View style={styles.itemCardContainer}>
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => setActiveSection("summary")}
+          onPress={() => {
+            setActiveSection("summary");
+            setViewMode("personal");
+          }}
         >
           <Text style={styles.profileSubTitle}>Summary Statistics</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => setActiveSection("city")}
+          onPress={() => {
+            setActiveSection("city");
+            setViewMode("global");
+          }}
         >
           <Text style={styles.profileSubTitle}>City-based Insights</Text>
         </TouchableOpacity>
@@ -252,61 +258,77 @@ const HealthAnalysis = () => {
               style={{
                 backgroundColor: "transparent",
                 alignSelf: "center",
-                padding: 10,
-              }}
-            >
-              <Text style={styles.subTitle}>
-                {viewMode === "personal"
-                  ? "My Statistics"
-                  : "Community Statistics"}
-              </Text>
-            </View>
-            <View style={styles.itemCardContainer}>
-              <TouchableOpacity
-                style={styles.itemContainer2}
-                onPress={() => setViewMode("personal")}
-              >
-                <Text style={styles.profileSubTitle}>My Stats</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.itemContainer2}
-                onPress={() => setViewMode("global")}
-              >
-                <Text style={styles.profileSubTitle}>Community Stats</Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                backgroundColor: "transparent",
-                alignSelf: "center",
                 paddingTop: 20,
               }}
             >
-              <Text style={{ fontSize: 25, color: "black" }}>
+              <Text
+                style={{
+                  fontSize: 30,
+                  color: "black",
+                  fontWeight: "bold",
+                  marginBottom: 20,
+                }}
+              >
                 City-based Insights
               </Text>
+
               {Object.entries(diseaseCityStats).map(([disease, cities]) => (
                 <View
                   style={{
-                    backgroundColor: "transparent",
-                    alignSelf: "center",
-                    paddingTop: 20,
+                    backgroundColor: "#f5f5f5",
+                    marginVertical: 10,
+                    marginHorizontal: 20,
+                    borderRadius: 10,
+                    padding: 15,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 5,
+                    elevation: 3,
                   }}
                   key={disease}
                 >
-                  <Text style={[styles.topTitle, { marginTop: 10 }]}>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontWeight: "bold",
+                      color: "#333",
+                      marginBottom: 10,
+                    }}
+                  >
                     {disease}
                   </Text>
+
                   {Object.entries(cities as Record<string, number>)
                     .sort(([, aCount], [, bCount]) => bCount - aCount)
+                    // .slice(0, 5) // Uncomment to show only top 5 cities
                     .map(([city, count]) => (
-                      <Text style={styles.topTitle} key={city}>
-                        - {city}: {count}
-                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 5,
+                          backgroundColor: "transparent",
+                        }}
+                        key={city}
+                      >
+                        <Text style={{ fontSize: 16, color: "#555" }}>
+                          {city}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "#888",
+                            marginLeft: 10,
+                          }}
+                        >
+                          ({count})
+                        </Text>
+                      </View>
                     ))}
                 </View>
               ))}
+
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
           </ScrollView>
