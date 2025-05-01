@@ -195,7 +195,7 @@ export default function TabTwoScreen() {
       {isVisible && (
         <Button
           title={loading ? "Loading..." : "Get Prediction"}
-          onPress={test}
+          onPress={handleGetPrediction}
           disabled={loading}
         />
       )}

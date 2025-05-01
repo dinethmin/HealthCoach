@@ -55,7 +55,7 @@ export default function TabOneScreen() {
 
   return (
     <LinearGradient
-      colors={["#3d7aa4", "#74b9e8", "#bbe1fa"]}
+      colors={["#438cbf", "#74b9e8", "#bbe1fa"]}
       locations={[0, 0.6, 1]}
       start={{ x: 1, y: 0 }}
       end={{ x: 0, y: 0 }}
@@ -224,19 +224,6 @@ const styles = StyleSheet.create({
     height: 20,
     backgroundColor: "transparent",
   },
-  container: {
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
-    flexDirection: "column",
-    width: "80%",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-  },
   topTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -253,26 +240,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
   },
-  profileSubTitleLogo: {
-    fontSize: 14,
-    fontWeight: "condensedBold",
-    color: "black",
-    alignSelf: "center",
-  },
   userCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-
+    justifyContent: "space-evenly",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 60,
+    margin: 10,
   },
   userCardItems: {
     flexDirection: "column",
     backgroundColor: "transparent",
-    alignItems: "flex-start",
-    padding: 0,
-    margin: 0,
+    paddingRight: 10,
+    marginRight: 10,
+    width: "60%",
   },
   itemCard: {
     backgroundColor: "transparent",

@@ -106,15 +106,11 @@ export default function LoginScreen() {
       start={{ x: 1, y: 0 }}
       end={{ x: 0, y: 0 }}
       style={{
-        paddingTop: 5,
-        paddingBottom: 5,
-        paddingLeft: 20,
-        paddingRight: 20,
-        borderRadius: 12,
+        paddingLeft: 10,
+        paddingRight: 10,
         alignItems: "center",
         flexDirection: "row",
         justifyContent: "center",
-        gap: 10,
         height: "100%",
         width: "100%",
       }}
