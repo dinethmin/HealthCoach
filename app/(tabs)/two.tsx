@@ -153,6 +153,7 @@ export default function TabTwoScreen() {
     }
   };
 
+  //Test function to simulate prediction data. For testing purposes only.
   const test = () => {
     interface PredictionData {
       predicted_disease: string;

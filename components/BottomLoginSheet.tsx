@@ -24,14 +24,14 @@ const BottomLoginSheet = () => {
         <TouchableOpacity>
           <LottieView
             source={{
-              uri: "https://lottie.host/1f9d65bc-5bfb-4769-8908-a720ae899fc5/Pqk7uq3v4K.json",
+              uri: "https://lottie.host/bfbe129f-3ef8-4a92-a67e-426446e074d4/XWeQl0BFbX.json",
             }}
             autoPlay
             loop
             speed={0.5}
             style={{ width: 40, height: 40 }}
           />
-          <Text style={styles.btnDarkText}>Signup with Email</Text>
+          <Text style={styles.btnDarkText}>Create an Account</Text>
         </TouchableOpacity>
       </Link>
       <Link
