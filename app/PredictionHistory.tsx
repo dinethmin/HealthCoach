@@ -12,10 +12,12 @@ import React, { useState, useEffect } from "react";
 import { get, ref, child } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import { LinearGradient } from "expo-linear-gradient";
+import LottieView from "lottie-react-native";
 
 const PredictionHistory = () => {
   const [history, setHistory] = useState<any[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchHistory();
@@ -49,7 +51,7 @@ const PredictionHistory = () => {
         );
         setHistory(predictionsArray);
       } else {
-        setError('No prediction history found');
+        setError("No prediction history found");
       }
     } catch (error) {
       console.error("Error fetching prediction history:", error);
@@ -57,47 +59,107 @@ const PredictionHistory = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-        keyboardVerticalOffset={1}
-      >
-        <View style={{ flex: 1, padding: 15 }}>
-          <Text style={styles.topTitle}>Prediction History</Text>
-          <ScrollView style={styles.scrollContainer}>
-            {history.map((item) => (
-              <View key={item.id} style={styles.card}>
-                <Text style={styles.cardTitle}>{item.predictedDisease}</Text>
-                <Text style={styles.cardSubtitle}>
-                  {new Date(item.timestamp).toLocaleString()}
-                </Text>
-                <Text style={{ color: "black" }}>City: {item.city}</Text>
-                <Text style={{ color: "black" }}>
-                  Symptoms: {item.selectedSymptoms.join(", ")}
-                </Text>
-                <Text style={{ color: "black" }}>Probabilities:</Text>
-                {Object.entries(item.probabilities).map(
-                  ([disease, probability]) => (
-                    <Text key={disease} style={{ color: "black" }}>
-                      • {disease}: {String(probability)}%
+    <LinearGradient
+      colors={["#e1ecf1", "#d2ebf7", "#d9eef9", "#e0f1f9", "#e6f2f8"]}
+      locations={[0, 0.3, 0.6, 0.8, 0.88]}
+      start={{ x: 1, y: 0 }}
+      end={{ x: 0, y: 0 }}
+      style={{
+        flex: 1,
+      }}
+    >
+      <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+          keyboardVerticalOffset={1}
+        >
+          <View style={{ flex: 1, padding: 15 }}>
+            <Text style={styles.topTitle}>Prediction History</Text>
+            <ScrollView style={styles.scrollContainer}>
+              {history.map((item) => (
+                <View key={item.id} style={styles.card}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text style={styles.cardTitle}>
+                      {item.predictedDisease}
                     </Text>
-                  )
-                )}
-              </View>
-            ))}
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          </ScrollView>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+                    <Text style={styles.cardSubtitle}>
+                      {new Date(item.timestamp).toLocaleString()}
+                    </Text>
+                  </View>
+                  <View style={{ height: 10 }} />
+
+                  <View style={{ paddingLeft: 10 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <Text style={{ color: "black", fontWeight: "bold" }}>
+                        {item.city}
+                      </Text>
+                      <LottieView
+                        source={{
+                          uri: "https://lottie.host/7025011a-4e71-4dd9-a761-75fd6f714cd2/uygGrEtl3h.json",
+                        }}
+                        autoPlay
+                        loop
+                        speed={0.5}
+                        style={{ width: 25, height: 25 }}
+                      />
+                    </View>
+
+                    <Text style={{ color: "black", fontWeight: "bold" }}>
+                      Symptoms{" "}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "black",
+                        fontWeight: "condensedBold",
+                        paddingLeft: 15,
+                      }}
+                    >
+                      {item.selectedSymptoms.join(", ")}
+                    </Text>
+                    <View style={{ height: 6 }} />
+
+                    <Text style={{ color: "black", fontWeight: "bold" }}>
+                      Probabilities
+                    </Text>
+                    {Object.entries(item.probabilities).map(
+                      ([disease, probability]) => (
+                        <Text
+                          key={disease}
+                          style={{ fontSize: 14, color: "black", paddingLeft: 15}}
+                        >
+                          {disease}: {String(probability)}%
+                        </Text>
+                      )
+                    )}
+                  </View>
+                </View>
+              ))}
+              {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "transparent",
   },
   scrollContainer: {
     marginBottom: 20,
@@ -134,7 +196,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     padding: 20,
     fontSize: 18,
     alignSelf: "center",

@@ -8,6 +8,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link, useFocusEffect } from "expo-router";
 import { child, get, ref } from "firebase/database";
 import { ColorPalette } from "@/constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Profile = () => {
   const [userimage, setUrl] = React.useState("");
@@ -56,128 +57,138 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white" }}
-      edges={["top", "left", "right"]}
+    <LinearGradient
+      colors={["#8dc7ef", "#76c0f1", "#b3ddf1", "#cdecf9", "#def0fa"]}
+      locations={[0, 0.3, 0.6, 0.85, 1]}
+      start={{ x: 1.2, y: 0.8 }}
+      end={{ x: 0.5, y: 1.02 }}
+      style={{
+        flex: 1,
+      }}
     >
-      <Text style={styles.topTitle}>My Profile</Text>
-      <View style={styles.userCard}>
-        <Image
-          source={{
-            uri:
-              userimage ||
-              "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Pic-Background.png",
-          }}
-          style={styles.profileImage}
-        />
-        <View style={styles.userCardItems}>
-          <Text style={styles.title}>{name}</Text>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "transparent" }}
+        edges={["top", "left", "right"]}
+      >
+        <Text style={styles.topTitle}>My Profile</Text>
+        <View style={styles.userCard}>
+          <Image
+            source={{
+              uri:
+                userimage ||
+                "https://www.pngplay.com/wp-content/uploads/12/Anime-Girl-Pfp-PNG-Pic-Background.png",
+            }}
+            style={styles.profileImage}
+          />
+          <View style={styles.userCardItems}>
+            <Text style={styles.title}>{name}</Text>
+            <Link
+              href={{
+                pathname: "/EditProfile",
+                params: {
+                  type: "page",
+                },
+              }}
+              asChild
+              style={[styles.btn]}
+            >
+              <TouchableOpacity>
+                <FontAwesome5
+                  name="user-edit"
+                  style={styles.btnIcon}
+                  size={16}
+                  color="white"
+                />
+                <Text style={styles.btnColor}>Edit Profile</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </View>
+        <View style={styles.profileCard}>
+          <View
+            style={{
+              backgroundColor: ColorPalette.greyLight,
+              padding: 5,
+              width: "100%",
+            }}
+          >
+            <Text style={styles.profileTitle}>Account Settings</Text>
+          </View>
           <Link
             href={{
-              pathname: "/EditProfile",
+              pathname: "/AccountLogin",
               params: {
                 type: "page",
               },
             }}
             asChild
-            style={[styles.btn]}
           >
-            <TouchableOpacity>
-              <FontAwesome5
-                name="user-edit"
-                style={styles.btnIcon}
-                size={16}
-                color="white"
-              />
-              <Text style={styles.btnColor}>Edit Profile</Text>
+            <TouchableOpacity
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={styles.profileSubTitle}>Account Login</Text>
+              <AntDesign style={styles.profileSubTitleLogo} name="right" />
             </TouchableOpacity>
           </Link>
-        </View>
-      </View>
-      <View style={styles.profileCard}>
-        <View
-          style={{
-            backgroundColor: ColorPalette.greyLight,
-            padding: 5,
-            width: "100%",
-          }}
-        >
-          <Text style={styles.profileTitle}>Account Settings</Text>
-        </View>
-        <Link
-          href={{
-            pathname: "/AccountLogin",
-            params: {
-              type: "page",
-            },
-          }}
-          asChild
-        >
           <TouchableOpacity
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={styles.profileSubTitle}>Account Login</Text>
+            <Text style={styles.profileSubTitle}>Privacy</Text>
             <AntDesign style={styles.profileSubTitleLogo} name="right" />
           </TouchableOpacity>
-        </Link>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>Privacy</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>Notification</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>Language</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-      </View>
-      <View style={{ height: 10, backgroundColor: "transparent" }} />
-      <View style={styles.profileCard}>
-        <View
-          style={{
-            backgroundColor: ColorPalette.greyLight,
-            padding: 5,
-            width: "100%",
-          }}
-        >
-          <Text style={styles.profileTitle}>Support</Text>
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>Notification</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>Language</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>Feedback</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>About Health Coach</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>Safety information</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <Text style={styles.profileSubTitle}>Rate us</Text>
-          <AntDesign style={styles.profileSubTitleLogo} name="right" />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.separator} />
-      <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
-    </SafeAreaView>
+        <View style={{ height: 10, backgroundColor: "transparent" }} />
+        <View style={styles.profileCard}>
+          <View
+            style={{
+              backgroundColor: ColorPalette.greyLight,
+              padding: 5,
+              width: "100%",
+            }}
+          >
+            <Text style={styles.profileTitle}>Support</Text>
+          </View>
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>Feedback</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>About Health Coach</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>Safety information</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.profileSubTitle}>Rate us</Text>
+            <AntDesign style={styles.profileSubTitleLogo} name="right" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.separator} />
+        <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()} />
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
