@@ -624,41 +624,44 @@ const HealthAnalysis = () => {
                   return (
                     <View style={styles.card} key={disease}>
                       <Text style={styles.cardTitle}>{disease}</Text>
-                      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                      <BarChart
-                        data={{
-                          labels: cityNames,
-                          datasets: [{ data: cityCounts }],
-                        }}
-                        width={Math.max(screenWidth, cityNames.length * 80)}
-                        height={220}
-                        fromZero
-                        yAxisLabel=""
-                        yAxisSuffix=""
-                        chartConfig={{
-                          backgroundColor: "#ffffff",
-                          backgroundGradientFrom: "#ffffff",
-                          backgroundGradientTo: "#e6f2f8",
-                          decimalPlaces: 0,
-                          color: (opacity = 1) =>
-                            `rgba(33, 150, 243, ${opacity})`, 
-                          labelColor: (opacity = 1) =>
-                            `rgba(0, 0, 0, ${opacity})`,
-                          style: {
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                      >
+                        <BarChart
+                          data={{
+                            labels: cityNames,
+                            datasets: [{ data: cityCounts }],
+                          }}
+                          width={Math.max(screenWidth, cityNames.length * 80)}
+                          height={220}
+                          fromZero
+                          yAxisLabel=""
+                          yAxisSuffix=""
+                          chartConfig={{
+                            backgroundColor: "#ffffff",
+                            backgroundGradientFrom: "#ffffff",
+                            backgroundGradientTo: "#e6f2f8",
+                            decimalPlaces: 0,
+                            color: (opacity = 1) =>
+                              `rgba(33, 150, 243, ${opacity})`,
+                            labelColor: (opacity = 1) =>
+                              `rgba(0, 0, 0, ${opacity})`,
+                            style: {
+                              borderRadius: 16,
+                            },
+                            propsForBackgroundLines: {
+                              strokeDasharray: "",
+                            },
+                            propsForLabels: {
+                              fontSize: 10,
+                            },
+                          }}
+                          style={{
+                            marginVertical: 8,
                             borderRadius: 16,
-                          },
-                          propsForBackgroundLines: {
-                            strokeDasharray: "", 
-                          },
-                          propsForLabels: {
-                            fontSize: 10,
-                          },
-                        }}
-                        style={{
-                          marginVertical: 8,
-                          borderRadius: 16,
-                        }}
-                      />
+                          }}
+                        />
                       </ScrollView>
 
                       {Object.entries(cities as Record<string, number>)
