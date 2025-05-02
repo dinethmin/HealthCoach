@@ -16,42 +16,42 @@ import { ReText } from "react-native-redash";
 
 const content = [
   {
-    title: "Track symptoms.",
+    title: "Track symptoms",
     bg: ColorPalette.teal,
     fontColor: ColorPalette.white,
   },
   {
-    title: "Stay informed.",
+    title: "Stay informed",
     bg: ColorPalette.blue2,
     fontColor: ColorPalette.yellow,
   },
   {
-    title: "Predict early.",
+    title: "Predict early",
     bg: ColorPalette.green,
     fontColor: ColorPalette.pink,
   },
   {
-    title: "Act on time.",
+    title: "Act on time",
     bg: ColorPalette.orange,
     fontColor: ColorPalette.white,
   },
   {
-    title: "Your health matters.",
+    title: "Your health matters",
     bg: ColorPalette.green,
     fontColor: ColorPalette.sky,
   },
   {
-    title: "Monitor. Prevent.",
+    title: "Monitor. Prevent",
     bg: ColorPalette.brown,
     fontColor: ColorPalette.lime,
   },
   {
-    title: "Stay one step ahead.",
+    title: "Stay one step ahead",
     bg: ColorPalette.teal,
     fontColor: ColorPalette.cyan,
   },
   {
-    title: "Be health smart.",
+    title: "Be health smart",
     bg: ColorPalette.darkBlue,
     fontColor: ColorPalette.gold,
   },
@@ -61,7 +61,7 @@ const content = [
     fontColor: ColorPalette.blue,
   },
   {
-    title: "Your Companion.",
+    title: "Your Companion",
     bg: ColorPalette.lime,
     fontColor: ColorPalette.blue,
   },

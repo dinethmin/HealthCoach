@@ -55,10 +55,10 @@ export default function TabOneScreen() {
 
   return (
     <LinearGradient
-      colors={["#438cbf", "#74b9e8", "#bbe1fa"]}
-      locations={[0, 0.6, 1]}
-      start={{ x: 1, y: 0 }}
-      end={{ x: 0, y: 0 }}
+      colors={["#81d3f7", "#b3ddf1", "#b3ddf1", "#cdecf9", "#b7ddef"]}
+      locations={[0, 0.3, 0.6, 0.85, 1]}
+      start={{ x: 0.5, y: 1.02 }}
+      end={{ x: 1.2, y: 0.8 }}
       style={{
         flex: 1,
       }}

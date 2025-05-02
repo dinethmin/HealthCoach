@@ -82,7 +82,7 @@ function RootLayoutNav() {
             presentation: "modal",
             title: "  Back",
             headerStyle: {
-              backgroundColor: "white",
+              backgroundColor: "023d69",
             },
             headerTitleStyle: {
               fontFamily: "mon-sb",

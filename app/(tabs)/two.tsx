@@ -3,7 +3,6 @@ import {
   Button,
   StyleSheet,
   ScrollView,
-  TextInput,
   Alert,
   TouchableOpacity,
 } from "react-native";
@@ -16,6 +15,7 @@ import { FIREBASE_Database } from "../../FirebaseConfig";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import LottieView from "lottie-react-native";
 import { Link } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 const symptomsList = [
   "Vomiting",
@@ -161,85 +161,124 @@ export default function TabTwoScreen() {
     }
 
     const predictionData: PredictionData = {
-      predicted_disease: "COVID",
+      predicted_disease: "COLD",
       probabilities: {
-      FLU: 78.5,
-      COLD: 15.2,
-      COVID: 6.3,
+        FLU: 78.5,
+        COLD: 15.2,
+        COVID: 6.3,
       },
     };
 
     setPrediction(predictionData);
     setIsVisible(false);
-    
-  }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Select Symptoms</Text>
-      <ScrollView style={styles.scrollContainer}>
-        {symptomsList.map((symptom) => (
-          <View key={symptom} style={styles.checkboxContainer}>
-            <Checkbox
-              value={selectedSymptoms.includes(symptom)}
-              onValueChange={() => handleSelectSymptom(symptom)}
-              color={selectedSymptoms.includes(symptom) ? "#4630EB" : undefined}
-            />
-            <Text style={styles.checkboxLabel}>{symptom}</Text>
-          </View>
-        ))}
-      </ScrollView>
-
-      <Button title="Cear All" onPress={handleClearSelection} />
-      <View style={styles.br} />
-      {isVisible && (
-        <Button
-          title={loading ? "Loading..." : "Get Prediction"}
-          onPress={handleGetPrediction}
-          disabled={loading}
-        />
-      )}
-
-      {prediction && (
-        <View style={styles.predictionContainer}>
-          <Text style={styles.predictionTitle}>Prediction Result</Text>
-          <Text style={{ color: "black" }}>
-            Predicted Disease: {prediction.predicted_disease}
-          </Text>
-          <Text style={{ color: "black" }}>Probabilities:</Text>
-          {Object.entries(prediction.probabilities)
-            .sort((a, b) => b[1] - a[1])
-            .map(([disease, probability]) => (
-              <Text style={{ color: "black" }} key={disease}>
-                {disease}: {probability}%
-              </Text>
-            ))}
-          <View style={{ height: 15, backgroundColor: "transparent" }} />
-          <Link
-            href={{
-              pathname: "/MoreDetails",
-              params: {
-                disease: prediction.predicted_disease,
-              },
-            }}
-            asChild
-          >
-            <TouchableOpacity style={styles.itemContainer}>
-              <LottieView
-                source={{
-                  uri: "https://lottie.host/430405b9-5254-4002-a915-bb23bf7db3d3/ftffN9lVSV.json",
-                }}
-                autoPlay
-                loop
-                speed={0.5}
-                style={{ width: 50, height: 50 }}
-              />
-              <Text style={styles.profileSubTitle}>Get More Details</Text>
-            </TouchableOpacity>
-          </Link>
+    <LinearGradient
+      colors={["#e6f2f8", "#d2ebf7", "#d9eef9", "#e0f1f9", "#f3f9fc"]}
+      locations={[0, 0.3, 0.6, 0.8, 0.88]}
+      start={{ x: 1, y: 0 }}
+      end={{ x: 0, y: 0 }}
+      style={{
+        flex: 1,
+      }}
+    >
+      <View style={styles.container}>
+        <View
+          style={{
+            backgroundColor: "transparent",
+            padding: 5,
+            marginBottom: 10,
+            borderRadius: 10,
+          }}
+        >
+          <Text style={styles.title}>Select Symptoms</Text>
         </View>
-      )}
-    </View>
+        <View style={{ height: 20, backgroundColor: "transparent" }} />
+        <ScrollView style={styles.scrollContainer}>
+          {symptomsList.map((symptom) => (
+            <View key={symptom} style={styles.checkboxContainer}>
+              <Checkbox
+                value={selectedSymptoms.includes(symptom)}
+                onValueChange={() => handleSelectSymptom(symptom)}
+                color={
+                  selectedSymptoms.includes(symptom) ? "#4630EB" : undefined
+                }
+              />
+              <Text style={styles.checkboxLabel}>{symptom}</Text>
+            </View>
+          ))}
+        </ScrollView>
+
+        <Button title="Cear All" onPress={handleClearSelection} />
+        <View style={styles.br} />
+        {isVisible && (
+          <Button
+            title={loading ? "Loading..." : "Get Prediction"}
+            onPress={test}
+            disabled={loading}
+          />
+        )}
+
+        {prediction && (
+          <View style={styles.predictionContainer}>
+            <Text style={styles.predictionTitle}>Prediction Result</Text>
+            <Text style={{ color: "black", paddingLeft: 10 }}>
+              Predicted Disease:{" "}
+              <Text style={{ color: "black", fontWeight: "bold" }}>
+                {prediction.predicted_disease}
+              </Text>
+            </Text>
+            <View style={{ height: 5, backgroundColor: "transparent" }} />
+            <Text style={{ color: "black", paddingLeft: 10 }}>
+              Probabilities
+            </Text>
+            <View
+              style={{
+                backgroundColor: "transparent",
+                paddingTop: 6,
+                paddingBottom: 10,
+                paddingLeft: "30%",
+              }}
+            >
+              {Object.entries(prediction.probabilities)
+                .sort((a, b) => b[1] - a[1])
+                .map(([disease, probability]) => (
+                  <Text
+                    style={{ color: "black", fontWeight: 500 }}
+                    key={disease}
+                  >
+                    {disease}: {probability}%
+                  </Text>
+                ))}
+            </View>
+            <View style={{ height: 15, backgroundColor: "transparent" }} />
+            <Link
+              href={{
+                pathname: "/MoreDetails",
+                params: {
+                  disease: prediction.predicted_disease,
+                },
+              }}
+              asChild
+            >
+              <TouchableOpacity style={styles.itemContainer}>
+                <LottieView
+                  source={{
+                    uri: "https://lottie.host/430405b9-5254-4002-a915-bb23bf7db3d3/ftffN9lVSV.json",
+                  }}
+                  autoPlay
+                  loop
+                  speed={0.5}
+                  style={{ width: 50, height: 50 }}
+                />
+                <Text style={styles.profileSubTitle}>Get More Details</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        )}
+      </View>
+    </LinearGradient>
   );
 }
 
@@ -247,24 +286,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "transparent",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
     textAlign: "center",
     color: "black",
   },
   scrollContainer: {
     marginBottom: 20,
-    backgroundColor: ColorPalette.light,
+    backgroundColor: "transparent",
   },
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
-    backgroundColor: ColorPalette.light,
+    backgroundColor: "transparent",
   },
   checkboxLabel: {
     marginLeft: 10,
@@ -277,13 +315,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
   },
   predictionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
     color: "black",
+    alignSelf: "center",
   },
   br: {
     height: 4,
