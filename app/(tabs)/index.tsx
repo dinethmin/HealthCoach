@@ -4,29 +4,126 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "react-native";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { child, get, ref } from "firebase/database";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useFocusEffect } from "expo-router";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ColorPalette } from "@/constants/Colors";
+import * as Animatable from "react-native-animatable";
 
 const healthTips = [
-  "💧 Stay hydrated: Drink at least 8 glasses of water daily.",
-  "🏃 Stay active: Aim for 30 mins of exercise most days.",
-  "🧘 Manage stress: Practice deep breathing or meditation.",
-  "🥗 Eat balanced meals: Include plenty of fruits and veggies.",
-  "🛌 Get enough sleep: 7–9 hours is best for adults.",
-  "😷 Wash your hands regularly with soap for at least 20 seconds.",
-  "🚭 Avoid smoking and limit alcohol intake.",
-  "☀️ Get sunlight exposure for Vitamin D (with protection).",
-  "👂 Listen to your body and seek medical care if needed.",
+  {
+    id: 1,
+    title: "Stay Hydrated",
+    description: "Drink at least 8 glasses of water daily.",
+    icon: "💧",
+  },
+  {
+    id: 2,
+    title: "Regular Exercise",
+    description: "Aim for 30 minutes of moderate activity most days.",
+    icon: "🏃‍♂️",
+  },
+  {
+    id: 3,
+    title: "Manage stress",
+    description: "Practice deep breathing or meditation.",
+    icon: "🧘",
+  },
+  {
+    id: 4,
+    title: "Eat balanced meals",
+    description: "Include plenty of fruits and veggies.",
+    icon: "🥗",
+  },
+  {
+    id: 5,
+    title: "Get enough sleep",
+    description: "7–9 hours is best for adults.",
+    icon: "🛌",
+  },
+  {
+    id: 6,
+    title: "Stay clean",
+    description: "Wash your hands regularly with soap for at least 20 seconds.",
+    icon: "😷",
+  },
+  {
+    id: 7,
+    title: "Stay healthy",
+    description: "Avoid smoking and limit alcohol intake.",
+    icon: "🚭",
+  },
+  {
+    id: 5,
+    title: "Practice Good Hygiene",
+    description:
+      "Wash your hands regularly to prevent infections and illnesses.",
+    icon: "🧼",
+  },
+  {
+    id: 6,
+    title: "Limit Screen Time",
+    description: "Take regular breaks from screens to rest your eyes and mind.",
+    icon: "📵",
+  },
+  {
+    id: 7,
+    title: "Protect Your Skin",
+    description:
+      "Use sunscreen when outdoors to protect your skin from harmful UV rays.",
+    icon: "🌞",
+  },
+  {
+    id: 8,
+    title: "Stay Connected",
+    description:
+      "Maintain strong social connections to support mental and emotional health.",
+    icon: "🤝",
+  },
+  {
+    id: 9,
+    title: "Mind Your Posture",
+    description:
+      "Practice good posture to avoid back and neck strain, especially when working at a desk.",
+    icon: "🪑",
+  },
+  {
+    id: 10,
+    title: "Practice Deep Breathing",
+    description:
+      "Incorporate deep breathing or mindfulness exercises to reduce stress.",
+    icon: "🌬️",
+  },
+  {
+    id: 11,
+    title: "Limit Caffeine",
+    description:
+      "Be mindful of caffeine intake, especially in the afternoon and evening.",
+    icon: "☕",
+  },
+  {
+    id: 12,
+    title: "Stay Informed",
+    description:
+      "Keep up with health news and guidelines to make informed decisions.",
+    icon: "📰",
+  },
+  {
+    id: 13,
+    title: "Stay healthy",
+    description: "Listen to your body and seek medical care if needed.",
+    icon: "👂",
+  },
 ];
 
 export default function TabOneScreen() {
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
   const [doctor, setDoctor] = useState(false);
+  const [currentTip1Index, setCurrentTip1Index] = useState(0);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
+  const [animation, setAnimation] = useState("fadeInRight");
 
   useFocusEffect(
     useCallback(() => {
@@ -35,13 +132,16 @@ export default function TabOneScreen() {
     }, [name, newName])
   );
 
-  // Rotate health tips every 4 seconds
+  // Rotate health tips every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTipIndex((prevIndex) =>
-        prevIndex === healthTips.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 4000);
+      setAnimation("fadeOutLeft");
+      setTimeout(() => {
+        setCurrentTipIndex((prevIndex) => (prevIndex + 1) % healthTips.length);
+        setAnimation("fadeInRight");
+      });
+    }, 10000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -185,13 +285,32 @@ export default function TabOneScreen() {
             </Link>
           ) : null}
         </View>
+
         <View style={styles.separator} />
+
         <View style={styles.itemCard}>
           <Text style={styles.profileTitle}>Health Tips</Text>
-          <Text>{healthTips[currentTipIndex]}</Text>
+          <View style={{ height: 10 }} />
+          <Animatable.View
+            key={healthTips[currentTipIndex].id}
+            animation={animation}
+            duration={300}
+          >
+            <View style={styles.card}>
+              <Text style={styles.tipTitle}>
+                {healthTips[currentTipIndex].icon}{" "}
+                {healthTips[currentTipIndex].title}
+              </Text>
+              <Text style={{ color: "black" }}>
+                {healthTips[currentTipIndex].description}
+              </Text>
+            </View>
+          </Animatable.View>
         </View>
+
         <View style={styles.separator} />
-        <View style={styles.itemCard}>
+
+        <View style={styles.itemCard1}>
           <Link
             href={{
               pathname: "/(tabs)/two",
@@ -254,7 +373,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   profileTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: "black",
     paddingLeft: 5,
@@ -264,13 +383,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
   },
+  tipTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "black",
+  },
+  card: {
+    backgroundColor: "rgb(255, 255, 255)",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    width: "90%",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   userCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "rgb(255, 255, 255)",
     borderRadius: 60,
     margin: 10,
+    shadowColor: "#rgb(0, 0, 0)",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   userCardItems: {
     flexDirection: "column",
@@ -284,6 +427,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "space-evenly",
+  },
+  itemCard1: {
+    backgroundColor: "transparent",
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    shadowColor: "#rgb(17, 19, 110)",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    borderRadius: 12,
   },
   itemCardContainer: {
     flexDirection: "row",
@@ -310,6 +464,10 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 0,
     borderRadius: 10,
+    shadowColor: "#rgb(11, 2, 134)",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   itemContainer2: {
     backgroundColor: ColorPalette.lightBlue,
@@ -320,6 +478,10 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 0,
     borderRadius: 10,
+    shadowColor: "#rgb(11, 2, 134)",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   profileImage: {
     width: 120,
