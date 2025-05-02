@@ -332,9 +332,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
-    elevation: 2,
+    elevation: 5,
   },
   cardTitle: {
     fontSize: 18,
