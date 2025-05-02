@@ -155,10 +155,10 @@ function RootLayoutNav() {
           name="PredictionHistory"
           options={{
             presentation: "modal",
-            title: "  Back",
+            title: "      Prediction History",
             headerTitleStyle: {
               fontFamily: "mon-sb",
-              fontSize: 20,
+              fontSize: 22,
               color: "#a5a3a3",
             },
             headerLeft: () => (
@@ -172,7 +172,7 @@ function RootLayoutNav() {
           name="HealthAnalysis"
           options={{
             presentation: "modal",
-            title: "  Back",
+            title: "      Health Analysis",
             headerTitleStyle: {
               fontFamily: "mon-sb",
               fontSize: 20,

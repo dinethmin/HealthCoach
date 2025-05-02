@@ -100,7 +100,15 @@ export default function TabTwoScreen() {
     if (selectedSymptoms.length === 0) {
       Alert.alert(
         "No symptoms selected",
-        "Please select at least one symptom."
+        "Please select at least 4 symptom."
+      );
+      return;
+    }
+
+    if (selectedSymptoms.length < 4) {
+      Alert.alert(
+        "Please select at least 4 symptom.",
+        "You need to select at least 4 symptoms to get a prediction."
       );
       return;
     }
@@ -215,7 +223,7 @@ export default function TabTwoScreen() {
         {isVisible && (
           <Button
             title={loading ? "Loading..." : "Get Prediction"}
-            onPress={test}
+            onPress={handleGetPrediction}
             disabled={loading}
           />
         )}
