@@ -89,6 +89,10 @@ const PredictionHistory = () => {
     }
   };
 
+  const filteredHistory = history.filter(
+    (item) => item.predictedDisease.toLowerCase() === activeSection
+  );
+
   return (
     <LinearGradient
       colors={["#e1ecf1", "#d2ebf7", "#d9eef9", "#e0f1f9", "#e6f2f8"]}
@@ -192,10 +196,34 @@ const PredictionHistory = () => {
                 </Animated.View>
               </TouchableOpacity>
             </View>
+
             <ScrollView style={styles.scrollContainer}>
-              {history
-                .filter((item) => item.predictedDisease.toLowerCase() === activeSection)
-                .map((item) => (
+              {filteredHistory.length === 0 ? (
+                <View
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: "20%",
+                    justifyContent: "center",
+                    padding: 20,
+                  }}
+                >
+                  <LottieView
+                    source={{
+                      uri: "https://lottie.host/2ca57a47-5e9d-4b1b-8899-38eaee5c6170/xCUCQvSMVm.json",
+                    }}
+                    autoPlay
+                    loop
+                    speed={0.5}
+                    style={{ width: 120, height: 120 }}
+                  />
+                  <View style={{ height: 30 }} />
+                  <Text style={{ fontSize: 16, color: "#555" }}>
+                    No data available for {activeSection.toUpperCase()}
+                  </Text>
+                </View>
+              ) : (
+                filteredHistory.map((item) => (
                   <View key={item.id} style={styles.card}>
                     <View
                       style={{
@@ -268,7 +296,8 @@ const PredictionHistory = () => {
                       )}
                     </View>
                   </View>
-                ))}
+                ))
+              )}
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </ScrollView>
           </View>

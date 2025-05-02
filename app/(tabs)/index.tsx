@@ -10,10 +10,23 @@ import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ColorPalette } from "@/constants/Colors";
 
+const healthTips = [
+  "💧 Stay hydrated: Drink at least 8 glasses of water daily.",
+  "🏃 Stay active: Aim for 30 mins of exercise most days.",
+  "🧘 Manage stress: Practice deep breathing or meditation.",
+  "🥗 Eat balanced meals: Include plenty of fruits and veggies.",
+  "🛌 Get enough sleep: 7–9 hours is best for adults.",
+  "😷 Wash your hands regularly with soap for at least 20 seconds.",
+  "🚭 Avoid smoking and limit alcohol intake.",
+  "☀️ Get sunlight exposure for Vitamin D (with protection).",
+  "👂 Listen to your body and seek medical care if needed.",
+];
+
 export default function TabOneScreen() {
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
   const [doctor, setDoctor] = useState(false);
+  const [currentTipIndex, setCurrentTipIndex] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -21,6 +34,16 @@ export default function TabOneScreen() {
       setNewName(name);
     }, [name, newName])
   );
+
+  // Rotate health tips every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTipIndex((prevIndex) =>
+        prevIndex === healthTips.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const fetchUserData = async () => {
     try {
@@ -165,6 +188,7 @@ export default function TabOneScreen() {
         <View style={styles.separator} />
         <View style={styles.itemCard}>
           <Text style={styles.profileTitle}>Health Tips</Text>
+          <Text>{healthTips[currentTipIndex]}</Text>
         </View>
         <View style={styles.separator} />
         <View style={styles.itemCard}>
