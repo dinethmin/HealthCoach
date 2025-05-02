@@ -7,8 +7,10 @@ import {
   Platform,
   ScrollView,
   Alert,
+  TouchableOpacity,
+  Animated,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { get, ref, child } from "firebase/database";
 import { FIREBASE_Database } from "../FirebaseConfig";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
@@ -18,6 +20,35 @@ import LottieView from "lottie-react-native";
 const PredictionHistory = () => {
   const [history, setHistory] = useState<any[]>([]);
   const [error, setError] = useState("");
+  const [activeSection, setActiveSection] = useState("flu");
+
+  const fluAnim = useRef(
+    new Animated.Value(activeSection === "flu" ? 1 : 0)
+  ).current;
+  const coldAnim = useRef(
+    new Animated.Value(activeSection === "cold" ? 1 : 0)
+  ).current;
+  const covidAnim = useRef(
+    new Animated.Value(activeSection === "covid" ? 1 : 0)
+  ).current;
+
+  useEffect(() => {
+    Animated.timing(fluAnim, {
+      toValue: activeSection === "flu" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(coldAnim, {
+      toValue: activeSection === "cold" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(covidAnim, {
+      toValue: activeSection === "covid" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+  }, [activeSection]);
 
   useEffect(() => {
     fetchHistory();
@@ -75,78 +106,169 @@ const PredictionHistory = () => {
           keyboardVerticalOffset={1}
         >
           <View style={{ flex: 1, padding: 15 }}>
-            <Text style={styles.topTitle}>Prediction History</Text>
-            <ScrollView style={styles.scrollContainer}>
-              {history.map((item) => (
-                <View key={item.id} style={styles.card}>
-                  <View
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                paddingBottom: 10,
+              }}
+            >
+              <TouchableOpacity onPress={() => setActiveSection("flu")}>
+                <Animated.View
+                  style={{
+                    paddingVertical: 5,
+                    paddingHorizontal: 20,
+                    borderRadius: 10,
+                    backgroundColor: fluAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["transparent", "#2196F3"],
+                    }),
+                  }}
+                >
+                  <Animated.Text
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      color: fluAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["#2c3e50", "#fff"],
+                      }),
                     }}
                   >
-                    <Text style={styles.cardTitle}>
-                      {item.predictedDisease}
-                    </Text>
-                    <Text style={styles.cardSubtitle}>
-                      {new Date(item.timestamp).toLocaleString()}
-                    </Text>
-                  </View>
-                  <View style={{ height: 10 }} />
-
-                  <View style={{ paddingLeft: 10 }}>
+                    FLU
+                  </Animated.Text>
+                </Animated.View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setActiveSection("cold")}>
+                <Animated.View
+                  style={{
+                    paddingVertical: 5,
+                    paddingHorizontal: 20,
+                    borderRadius: 10,
+                    backgroundColor: coldAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["transparent", "#2196F3"],
+                    }),
+                  }}
+                >
+                  <Animated.Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      color: coldAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["#2c3e50", "#fff"],
+                      }),
+                    }}
+                  >
+                    COLD
+                  </Animated.Text>
+                </Animated.View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setActiveSection("covid")}>
+                <Animated.View
+                  style={{
+                    paddingVertical: 5,
+                    paddingHorizontal: 20,
+                    borderRadius: 10,
+                    backgroundColor: covidAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["transparent", "#2196F3"],
+                    }),
+                  }}
+                >
+                  <Animated.Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      color: covidAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["#2c3e50", "#fff"],
+                      }),
+                    }}
+                  >
+                    COVID
+                  </Animated.Text>
+                </Animated.View>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.scrollContainer}>
+              {history
+                .filter((item) => item.predictedDisease.toLowerCase() === activeSection)
+                .map((item) => (
+                  <View key={item.id} style={styles.card}>
                     <View
                       style={{
                         flexDirection: "row",
-                        justifyContent: "flex-end",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <Text style={{ color: "black", fontWeight: "bold" }}>
-                        {item.city}
+                      <Text style={styles.cardTitle}>
+                        {item.predictedDisease}
                       </Text>
-                      <LottieView
-                        source={{
-                          uri: "https://lottie.host/7025011a-4e71-4dd9-a761-75fd6f714cd2/uygGrEtl3h.json",
-                        }}
-                        autoPlay
-                        loop
-                        speed={0.5}
-                        style={{ width: 25, height: 25 }}
-                      />
+                      <Text style={styles.cardSubtitle}>
+                        {new Date(item.timestamp).toLocaleString()}
+                      </Text>
                     </View>
+                    <View style={{ height: 10 }} />
 
-                    <Text style={{ color: "black", fontWeight: "bold" }}>
-                      Symptoms{" "}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "black",
-                        fontWeight: "condensedBold",
-                        paddingLeft: 15,
-                      }}
-                    >
-                      {item.selectedSymptoms.join(", ")}
-                    </Text>
-                    <View style={{ height: 6 }} />
-
-                    <Text style={{ color: "black", fontWeight: "bold" }}>
-                      Probabilities
-                    </Text>
-                    {Object.entries(item.probabilities).map(
-                      ([disease, probability]) => (
-                        <Text
-                          key={disease}
-                          style={{ fontSize: 14, color: "black", paddingLeft: 15}}
-                        >
-                          {disease}: {String(probability)}%
+                    <View style={{ paddingLeft: 10 }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <Text style={{ color: "black", fontWeight: "bold" }}>
+                          {item.city}
                         </Text>
-                      )
-                    )}
+                        <LottieView
+                          source={{
+                            uri: "https://lottie.host/7025011a-4e71-4dd9-a761-75fd6f714cd2/uygGrEtl3h.json",
+                          }}
+                          autoPlay
+                          loop
+                          speed={0.5}
+                          style={{ width: 25, height: 25 }}
+                        />
+                      </View>
+
+                      <Text style={{ color: "black", fontWeight: "bold" }}>
+                        Symptoms{" "}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: "black",
+                          fontWeight: "condensedBold",
+                          paddingLeft: 15,
+                        }}
+                      >
+                        {item.selectedSymptoms.join(", ")}
+                      </Text>
+                      <View style={{ height: 6 }} />
+
+                      <Text style={{ color: "black", fontWeight: "bold" }}>
+                        Probabilities
+                      </Text>
+                      {Object.entries(item.probabilities).map(
+                        ([disease, probability]) => (
+                          <Text
+                            key={disease}
+                            style={{
+                              fontSize: 14,
+                              color: "black",
+                              paddingLeft: 15,
+                            }}
+                          >
+                            {disease}: {String(probability)}%
+                          </Text>
+                        )
+                      )}
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </ScrollView>
           </View>
