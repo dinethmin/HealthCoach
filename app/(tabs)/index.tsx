@@ -202,6 +202,15 @@ export default function TabOneScreen() {
         </View>
         <View style={styles.separator} />
         <View style={styles.itemCardContainer}>
+          <Link
+            href={{
+              pathname: "/ChatRoom",
+              params: {
+                type: "page",
+              },
+            }}
+            asChild
+          >
           <TouchableOpacity style={styles.itemContainer}>
             <LottieView
               source={{
@@ -214,6 +223,7 @@ export default function TabOneScreen() {
             />
             <Text style={styles.profileSubTitle}>Chat</Text>
           </TouchableOpacity>
+          </Link>
           <Link
             href={{
               pathname: "/PredictionHistory",
