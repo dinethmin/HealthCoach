@@ -152,23 +152,6 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
-          name="ChatRoom"
-          options={{
-            presentation: "modal",
-            title: "      ChatRoom",
-            headerTitleStyle: {
-              fontFamily: "mon-sb",
-              fontSize: 22,
-              color: "#a5a3a3",
-            },
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <AntDesign name="arrowleft" size={24} color="white" />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen
           name="PredictionHistory"
           options={{
             presentation: "modal",
@@ -213,6 +196,43 @@ function RootLayoutNav() {
             headerTitleStyle: {
               fontFamily: "mon-sb",
               fontSize: 20,
+              color: "#a5a3a3",
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <AntDesign name="arrowleft" size={24} color="black" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="Chat"
+          options={{
+            presentation: "modal",
+            title: "      Chat List",
+            headerTitleStyle: {
+              fontFamily: "mon-sb",
+              fontSize: 22,
+              color: "#a5a3a3",
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <AntDesign name="arrowleft" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="CRoom"
+          options={{
+            presentation: "modal",
+            title: "      Chat Room",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTitleStyle: {
+              fontFamily: "mon-sb",
+              fontSize: 22,
               color: "#a5a3a3",
             },
             headerLeft: () => (

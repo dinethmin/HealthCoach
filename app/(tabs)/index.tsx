@@ -204,7 +204,7 @@ export default function TabOneScreen() {
         <View style={styles.itemCardContainer}>
           <Link
             href={{
-              pathname: "/ChatRoom",
+              pathname: "/Chat",
               params: {
                 type: "page",
               },

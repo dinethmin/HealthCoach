@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import { Link, useLocalSearchParams } from "expo-router";
@@ -115,177 +116,184 @@ export default function LoginScreen() {
         width: "100%",
       }}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-        keyboardVerticalOffset={1}
-      >
-        {loading && (
-          <View style={defaultStyles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#fff" />
-          </View>
-        )}
-
-        {type === "login" ? (
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                margin: 0,
-              }}
-            >
-              <Image
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 50,
-                }}
-                resizeMode="contain"
-                source={require("../assets/images/Logo.png")}
-              />
+      
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+          keyboardVerticalOffset={1}
+        >
+          {loading && (
+            <View style={defaultStyles.loadingOverlay}>
+              <ActivityIndicator size="large" color="#fff" />
             </View>
-            <View style={{ height: 5 }} />
-            <View style={styles.subContainer2}>
-              <Text style={styles.title1}>Login</Text>
-              <View style={{ height: 10 }} />
-              <Text style={styles.subTitle}>Welcome Back! </Text>
-              <Text style={styles.subTitle}>Log in to manage your health.</Text>
-            </View>
-          </View>
-        ) : (
-          <View>
-            <View style={{ height: 30 }} />
-            <Text style={styles.title}>Sign Up</Text>
-            <View style={{ height: 5 }} />
-            <Text style={styles.subTitle1}>Create an User Account</Text>
-          </View>
-        )}
+          )}
 
-        <View>
           {type === "login" ? (
-            <>
-              <TextInput
-                autoCapitalize="none"
-                placeholder="Email"
-                style={styles.inputField}
-                value={email}
-                onChangeText={setEmail}
-              />
-              <TextInput
-                autoCapitalize="none"
-                placeholder="Password"
-                style={styles.inputField}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-              <TouchableOpacity
-                onPress={signIn}
-                style={[defaultStyles.btn, styles.btnPrimary]}
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  margin: 0,
+                }}
               >
-                <Text style={styles.btnPrimaryText}>Login</Text>
-              </TouchableOpacity>
-            </>
+                <Image
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                  }}
+                  resizeMode="contain"
+                  source={require("../assets/images/Logo.png")}
+                />
+              </View>
+              <View style={{ height: 5 }} />
+              <View style={styles.subContainer2}>
+                <Text style={styles.title1}>Login</Text>
+                <View style={{ height: 10 }} />
+                <Text style={styles.subTitle}>Welcome Back! </Text>
+                <Text style={styles.subTitle}>
+                  Log in to manage your health.
+                </Text>
+              </View>
+            </View>
           ) : (
-            <ScrollView style={styles.scrollContainer}>
-              <TextInput
-                autoCapitalize="words"
-                placeholder="Name"
-                style={styles.inputField}
-                value={name}
-                onChangeText={setName}
-              />
-              <TextInput
-                autoCapitalize="none"
-                placeholder="Phone"
-                style={styles.inputField}
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="phone-pad"
-              />
-              {phone && !/^[0-9]{10}$/.test(phone) && (
-                <Text style={styles.errorText}>
-                  Please enter a valid phone number format (10 digit).
-                </Text>
-              )}
-              <TextInput
-                autoCapitalize="none"
-                placeholder="Birthday (DD/MM/YYYY)"
-                style={styles.inputField}
-                value={birthday}
-                onChangeText={setBirthday}
-              />
-              {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(birthday) && (
-                <Text style={styles.errorText}>
-                  Please enter a valid date format.
-                </Text>
-              )}
-              <TextInput
-                autoCapitalize="words"
-                placeholder="Gender (Male, Female)"
-                style={styles.inputField}
-                value={gender}
-                onChangeText={setGender}
-              />
-              {gender &&
-                !["Male", "Female", "Non-binary", "Other"].includes(gender) && (
+            <View>
+              <View style={{ height: 30 }} />
+              <Text style={styles.title}>Sign Up</Text>
+              <View style={{ height: 5 }} />
+              <Text style={styles.subTitle1}>Create an User Account</Text>
+            </View>
+          )}
+
+          <View>
+            {type === "login" ? (
+              <>
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Email"
+                  style={styles.inputField}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Password"
+                  style={styles.inputField}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                />
+                <TouchableOpacity
+                  onPress={signIn}
+                  style={[defaultStyles.btn, styles.btnPrimary]}
+                >
+                  <Text style={styles.btnPrimaryText}>Login</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <ScrollView style={styles.scrollContainer}>
+                <TextInput
+                  autoCapitalize="words"
+                  placeholder="Name"
+                  style={styles.inputField}
+                  value={name}
+                  onChangeText={setName}
+                />
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Phone"
+                  style={styles.inputField}
+                  value={phone}
+                  onChangeText={setPhone}
+                  keyboardType="phone-pad"
+                />
+                {phone && !/^[0-9]{10}$/.test(phone) && (
                   <Text style={styles.errorText}>
-                    Please enter a valid gender.
+                    Please enter a valid phone number format (10 digit).
                   </Text>
                 )}
-              <TextInput
-                autoCapitalize="words"
-                placeholder="City"
-                style={styles.inputField}
-                value={city}
-                onChangeText={setCity}
-              />
-              <TextInput
-                autoCapitalize="none"
-                placeholder="Email"
-                style={styles.inputField}
-                value={email}
-                onChangeText={setEmail}
-              />
-              <TextInput
-                autoCapitalize="none"
-                placeholder="Password"
-                style={styles.inputField}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-              <View style={{ height: 10 }} />
-              <TouchableOpacity
-                onPress={signUp}
-                style={[defaultStyles.btn, styles.btnPrimary]}
-              >
-                <Text style={styles.btnPrimaryText}>Create account</Text>
-              </TouchableOpacity>
-
-              <View style={styles.subContainer}>
-                <Text style={styles.subTitle}>
-                  Are you a <Text style={{ color: "#298f76" }}>Doctor? </Text>{" "}
-                </Text>
-                <Link
-                  href={{
-                    pathname: "/DoctorSignUp",
-                    params: {
-                      type: "page",
-                    },
-                  }}
-                  asChild
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Birthday (DD/MM/YYYY)"
+                  style={styles.inputField}
+                  value={birthday}
+                  onChangeText={setBirthday}
+                />
+                {birthday && !/^\d{2}\/\d{2}\/\d{4}$/.test(birthday) && (
+                  <Text style={styles.errorText}>
+                    Please enter a valid date format.
+                  </Text>
+                )}
+                <TextInput
+                  autoCapitalize="words"
+                  placeholder="Gender (Male, Female)"
+                  style={styles.inputField}
+                  value={gender}
+                  onChangeText={setGender}
+                />
+                {gender &&
+                  !["Male", "Female", "Non-binary", "Other"].includes(
+                    gender
+                  ) && (
+                    <Text style={styles.errorText}>
+                      Please enter a valid gender.
+                    </Text>
+                  )}
+                <TextInput
+                  autoCapitalize="words"
+                  placeholder="City"
+                  style={styles.inputField}
+                  value={city}
+                  onChangeText={setCity}
+                />
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Email"
+                  style={styles.inputField}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Password"
+                  style={styles.inputField}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                />
+                <View style={{ height: 10 }} />
+                <TouchableOpacity
+                  onPress={signUp}
+                  style={[defaultStyles.btn, styles.btnPrimary]}
                 >
-                  <TouchableOpacity style={{ backgroundColor: "transparent" }}>
-                    <Text style={styles.subTitle2}>Crate an Account</Text>
-                  </TouchableOpacity>
-                </Link>
-              </View>
-            </ScrollView>
-          )}
-        </View>
-      </KeyboardAvoidingView>
+                  <Text style={styles.btnPrimaryText}>Create account</Text>
+                </TouchableOpacity>
+
+                <View style={styles.subContainer}>
+                  <Text style={styles.subTitle}>
+                    Are you a <Text style={{ color: "#298f76" }}>Doctor? </Text>{" "}
+                  </Text>
+                  <Link
+                    href={{
+                      pathname: "/DoctorSignUp",
+                      params: {
+                        type: "page",
+                      },
+                    }}
+                    asChild
+                  >
+                    <TouchableOpacity
+                      style={{ backgroundColor: "transparent" }}
+                    >
+                      <Text style={styles.subTitle2}>Crate an Account</Text>
+                    </TouchableOpacity>
+                  </Link>
+                </View>
+              </ScrollView>
+            )}
+          </View>
+        </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
@@ -293,7 +301,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 20,
     backgroundColor: "transparent",
   },
   subContainer: {
