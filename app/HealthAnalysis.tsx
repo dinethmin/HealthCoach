@@ -5,16 +5,18 @@ import {
   TouchableOpacity,
   Dimensions,
   Animated,
+  TextInput,
 } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
 import { child, get, ref } from "firebase/database";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ColorPalette } from "@/constants/Colors";
 import { BarChart } from "react-native-chart-kit";
 import { PieChart } from "react-native-chart-kit";
 import { LinearGradient } from "expo-linear-gradient";
+import { Card } from "react-native-paper";
 
 const HealthAnalysis = () => {
   const [error, setError] = useState("");
@@ -29,6 +31,15 @@ const HealthAnalysis = () => {
   const [viewMode, setViewMode] = useState<"personal" | "global">("personal");
   const [diseaseSection, setDiseaseSection] = useState("FLU");
   const screenWidth = Dimensions.get("window").width;
+
+  // health data for suggestions
+  const [systolic, setSystolic] = useState("");
+  const [diastolic, setDiastolic] = useState("");
+  const [sugar, setSugar] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [heartRate, setHeartRate] = useState("");
+  const [sleep, setSleep] = useState("");
 
   // Animations for Main Selection Sections
   const summaryAnim = useRef(
@@ -208,6 +219,68 @@ const HealthAnalysis = () => {
   function getRandomColor(index: number) {
     const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#8BC34A", "#FF9800"];
     return colors[index % colors.length];
+  }
+
+  // Suggestions
+  // Calculate BMI
+  const calcBMI = () => {
+    const h = parseFloat(height) / 100; // convert to meters
+    const w = parseFloat(weight);
+    if (!h || !w) return null;
+    return parseFloat((w / (h * h)).toFixed(1));
+  };
+
+  const bmi = calcBMI();
+
+  const suggestions = [];
+
+  // Blood Pressure
+  if (systolic && diastolic) {
+    const sys = parseInt(systolic);
+    const dia = parseInt(diastolic);
+    if (sys > 130 || dia > 80)
+      suggestions.push("High BP. Reduce salt, exercise, monitor regularly.");
+    else if (sys < 90 || dia < 60)
+      suggestions.push("Low BP. Stay hydrated, consult doctor.");
+    else suggestions.push("Blood pressure is normal.");
+  }
+
+  // Sugar
+  if (sugar) {
+    const s = parseFloat(sugar);
+    if (s < 70)
+      suggestions.push("Low sugar. Consider a snack and consult doctor.");
+    else if (s > 140)
+      suggestions.push("High sugar. Reduce sugar intake and monitor.");
+    else suggestions.push("Sugar level is normal.");
+  }
+
+  // BMI
+  if (bmi) {
+    if (bmi < 18.5)
+      suggestions.push("Underweight. Balanced diet can help gain weight.");
+    else if (bmi >= 25)
+      suggestions.push("Overweight. Exercise and mindful eating suggested.");
+    else suggestions.push("BMI is in a healthy range.");
+  }
+
+  // Heart rate
+  if (heartRate) {
+    const hr = parseInt(heartRate);
+    if (hr < 60)
+      suggestions.push("Low heart rate. Normal for athletes, else check.");
+    else if (hr > 100)
+      suggestions.push("High heart rate. Try to relax, seek advice if needed.");
+    else suggestions.push("Heart rate is normal.");
+  }
+
+  // Sleep
+  if (sleep) {
+    const sl = parseFloat(sleep);
+    if (sl < 6)
+      suggestions.push("Low sleep. Aim for 7–9 hours to feel rested.");
+    else if (sl > 9) suggestions.push("Too much sleep. Monitor for fatigue.");
+    else suggestions.push("Sleep duration is healthy.");
   }
 
   return (
@@ -681,22 +754,43 @@ const HealthAnalysis = () => {
           )}
 
           {activeSection === "suggestions" && (
-            <ScrollView
-              style={styles.scrollContainer}
-              contentContainerStyle={{ padding: 10 }}
-            >
-              <Text style={styles.topTitle}>📋 Personal Suggestions</Text>
-              {stats.total > 10 ? (
-                <Text style={styles.topTitle}>
-                  Consider visiting a medical professional. You’ve had{" "}
-                  {stats.total} predictions.
-                </Text>
-              ) : (
-                <Text style={styles.topTitle}>
-                  You're doing great! Stay hydrated and maintain good hygiene.
-                  👍
-                </Text>
-              )}
+            <ScrollView style={styles.container}>
+              <Text style={styles.title}>Enter Your Health Data</Text>
+
+              <Input
+                label="Systolic BP (mmHg)"
+                value={systolic}
+                onChange={setSystolic}
+              />
+              <Input
+                label="Diastolic BP (mmHg)"
+                value={diastolic}
+                onChange={setDiastolic}
+              />
+              <Input
+                label="Blood Sugar (mg/dL)"
+                value={sugar}
+                onChange={setSugar}
+              />
+              <Input label="Height (cm)" value={height} onChange={setHeight} />
+              <Input label="Weight (kg)" value={weight} onChange={setWeight} />
+              <Input
+                label="Heart Rate (bpm)"
+                value={heartRate}
+                onChange={setHeartRate}
+              />
+              <Input label="Sleep Hours" value={sleep} onChange={setSleep} />
+
+              {bmi && <Text style={styles.bmiText}>Calculated BMI: {bmi}</Text>}
+
+              <Text style={styles.subTitle}>Personal Suggestions</Text>
+              {suggestions.map((s, index) => (
+                <Card key={index} style={styles.card1}>
+                  <Card.Content>
+                    <Text>{s}</Text>
+                  </Card.Content>
+                </Card>
+              ))}
             </ScrollView>
           )}
         </View>
@@ -705,18 +799,29 @@ const HealthAnalysis = () => {
   );
 };
 
+const Input: React.FC<{ label: string; value: string; onChange: (text: string) => void }> = ({ label, value, onChange }) => (
+  <View style={styles.inputContainer}>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      value={value}
+      onChangeText={onChange}
+      keyboardType="numeric"
+      placeholder="Enter value"
+      style={styles.input}
+    />
+  </View>
+);
+
 const styles = StyleSheet.create({
   separator: {
     height: 6,
     backgroundColor: "transparent",
   },
   container: {
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     flexDirection: "column",
-    width: "80%",
+    marginBottom: 120,
+    padding: 10,
   },
   scrollContainer: {
     marginBottom: 120,
@@ -726,6 +831,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "black",
+    paddingBottom: 10,
   },
   topTitle: {
     fontSize: 20,
@@ -784,6 +890,38 @@ const styles = StyleSheet.create({
   },
   cityName: { fontSize: 16, color: "#555" },
   cityCount: { fontSize: 12, color: "#888", marginRight: 5 },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 12,
+    color: "#0d47a1",
+  },
+  inputContainer: {
+    marginBottom: 12,
+    backgroundColor: "transparent",
+  },
+  label: {
+    fontWeight: "600",
+    marginBottom: 4,
+    color: "#333",
+  },
+  input: {
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 8,
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
+  bmiText: {
+    fontSize: 16,
+    color: "#1b5e20",
+    marginTop: 10,
+  },
+  card1: {
+    marginBottom: 10,
+    backgroundColor: "#000",
+    borderRadius: 10,
+  },
 });
 
 export default HealthAnalysis;
