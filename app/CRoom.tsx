@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
@@ -41,8 +47,8 @@ const CRoom = () => {
       end={{ x: 0, y: 0 }}
       style={{ flex: 1 }}
     >
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.chatHeader}>Chat with: {chatId}</Text>
+      <Text style={styles.chatHeader}>Chat with: {chatId}</Text>
+      <KeyboardAvoidingView style={{ flex: 1 }}>
         <GiftedChat
           messages={messages
             .map((msg) => ({
@@ -57,7 +63,7 @@ const CRoom = () => {
           }}
           user={{ _id: "user1" }}
         />
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 };

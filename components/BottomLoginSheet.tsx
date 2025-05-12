@@ -13,7 +13,7 @@ const BottomLoginSheet = () => {
     <View style={[styles.container, { paddingBottom: bottom }]}>
       <Link
         href={{
-          pathname: "/login",
+          pathname: "/Signin",
           params: {
             type: "register",
           },

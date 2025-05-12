@@ -121,7 +121,6 @@ export default function TabOneScreen() {
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
   const [doctor, setDoctor] = useState(false);
-  const [currentTip1Index, setCurrentTip1Index] = useState(0);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
   const [animation, setAnimation] = useState("fadeInRight");
 
