@@ -30,6 +30,7 @@ const HealthAnalysis = () => {
   const [activeSection, setActiveSection] = useState("summary");
   const [viewMode, setViewMode] = useState<"personal" | "global">("personal");
   const [diseaseSection, setDiseaseSection] = useState("FLU");
+  const [suggestionsSection, setSuggestionsSection] = useState("blood");
   const screenWidth = Dimensions.get("window").width;
 
   // health data for suggestions
@@ -98,6 +99,51 @@ const HealthAnalysis = () => {
       useNativeDriver: false,
     }).start();
   }, [diseaseSection]);
+
+  // Animations for Disease Selection Sections (Personal Suggestions)
+  const bloodPAnim = useRef(
+    new Animated.Value(suggestionsSection === "blood" ? 1 : 0)
+  ).current;
+  const sugerAnim = useRef(
+    new Animated.Value(suggestionsSection === "suger" ? 1 : 0)
+  ).current;
+  const bmiAnim = useRef(
+    new Animated.Value(suggestionsSection === "bmi" ? 1 : 0)
+  ).current;
+  const heartRAnim = useRef(
+    new Animated.Value(suggestionsSection === "heart" ? 1 : 0)
+  ).current;
+  const sleepAnim = useRef(
+    new Animated.Value(suggestionsSection === "sleep" ? 1 : 0)
+  ).current;
+
+  useEffect(() => {
+    Animated.timing(bloodPAnim, {
+      toValue: suggestionsSection === "blood" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(sugerAnim, {
+      toValue: suggestionsSection === "suger" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(bmiAnim, {
+      toValue: suggestionsSection === "bmi" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(heartRAnim, {
+      toValue: suggestionsSection === "heart" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(sleepAnim, {
+      toValue: suggestionsSection === "sleep" ? 1 : 0,
+      duration: 600,
+      useNativeDriver: false,
+    }).start();
+  }, [suggestionsSection]);
 
   // Fetch History Data
   useEffect(() => {
@@ -232,55 +278,64 @@ const HealthAnalysis = () => {
 
   const bmi = calcBMI();
 
-  const suggestions = [];
+  const suggestions = {
+    bloodPressure: null as string | null,
+    sugar: null as string | null,
+    bmi: null as string | null,
+    heartRate: null as string | null,
+    sleep: null as string | null,
+  };
 
   // Blood Pressure
   if (systolic && diastolic) {
     const sys = parseInt(systolic);
     const dia = parseInt(diastolic);
     if (sys > 130 || dia > 80)
-      suggestions.push("High BP. Reduce salt, exercise, monitor regularly.");
+      suggestions.bloodPressure =
+        "High BP. Reduce salt, exercise, monitor regularly.";
     else if (sys < 90 || dia < 60)
-      suggestions.push("Low BP. Stay hydrated, consult doctor.");
-    else suggestions.push("Blood pressure is normal.");
+      suggestions.bloodPressure = "Low BP. Stay hydrated, consult doctor.";
+    else suggestions.bloodPressure = "Blood pressure is normal.";
   }
 
   // Sugar
   if (sugar) {
     const s = parseFloat(sugar);
     if (s < 70)
-      suggestions.push("Low sugar. Consider a snack and consult doctor.");
+      suggestions.sugar = "Low sugar. Consider a snack and consult doctor.";
     else if (s > 140)
-      suggestions.push("High sugar. Reduce sugar intake and monitor.");
-    else suggestions.push("Sugar level is normal.");
+      suggestions.sugar = "High sugar. Reduce sugar intake and monitor.";
+    else suggestions.sugar = "Sugar level is normal.";
   }
 
   // BMI
   if (bmi) {
     if (bmi < 18.5)
-      suggestions.push("Underweight. Balanced diet can help gain weight.");
+      suggestions.bmi = "Underweight. Balanced diet can help gain weight.";
     else if (bmi >= 25)
-      suggestions.push("Overweight. Exercise and mindful eating suggested.");
-    else suggestions.push("BMI is in a healthy range.");
+      suggestions.bmi = "Overweight. Exercise and mindful eating suggested.";
+    else suggestions.bmi = "BMI is in a healthy range.";
   }
 
   // Heart rate
   if (heartRate) {
     const hr = parseInt(heartRate);
     if (hr < 60)
-      suggestions.push("Low heart rate. Normal for athletes, else check.");
+      suggestions.heartRate =
+        "Low heart rate. Normal for athletes, else check.";
     else if (hr > 100)
-      suggestions.push("High heart rate. Try to relax, seek advice if needed.");
-    else suggestions.push("Heart rate is normal.");
+      suggestions.heartRate =
+        "High heart rate. Try to relax, seek advice if needed.";
+    else suggestions.heartRate = "Heart rate is normal.";
   }
 
   // Sleep
   if (sleep) {
     const sl = parseFloat(sleep);
     if (sl < 6)
-      suggestions.push("Low sleep. Aim for 7–9 hours to feel rested.");
-    else if (sl > 9) suggestions.push("Too much sleep. Monitor for fatigue.");
-    else suggestions.push("Sleep duration is healthy.");
+      suggestions.sleep = "Low sleep. Aim for 7–9 hours to feel rested.";
+    else if (sl > 9) suggestions.sleep = "Too much sleep. Monitor for fatigue.";
+    else suggestions.sleep = "Sleep duration is healthy.";
   }
 
   return (
@@ -754,44 +809,271 @@ const HealthAnalysis = () => {
           )}
 
           {activeSection === "suggestions" && (
-            <ScrollView style={styles.container}>
-              <Text style={styles.title}>Enter Your Health Data</Text>
+            <View style={{ backgroundColor: "transparent" }}>
+              <View
+                style={{
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  paddingBottom: 10,
+                  paddingTop: 10,
+                  paddingHorizontal: 15,
+                  borderRadius: 20,
+                  backgroundColor: "rgba(255, 255, 255, 0.40)",
+                  alignItems: "center",
+                  marginHorizontal: 8,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => setSuggestionsSection("blood")}
+                >
+                  <Animated.View
+                    style={{
+                      paddingVertical: 2,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                      backgroundColor: bloodPAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["transparent", "#2196F3"],
+                      }),
+                    }}
+                  >
+                    <Animated.Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: bloodPAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["#2c3e50", "#fff"],
+                        }),
+                      }}
+                    >
+                      Blood Pressure
+                    </Animated.Text>
+                  </Animated.View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setSuggestionsSection("suger")}
+                >
+                  <Animated.View
+                    style={{
+                      paddingVertical: 2,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                      backgroundColor: sugerAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["transparent", "#2196F3"],
+                      }),
+                    }}
+                  >
+                    <Animated.Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: sugerAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["#2c3e50", "#fff"],
+                        }),
+                      }}
+                    >
+                      Blood Sugar
+                    </Animated.Text>
+                  </Animated.View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSuggestionsSection("bmi")}>
+                  <Animated.View
+                    style={{
+                      paddingVertical: 2,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                      backgroundColor: bmiAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["transparent", "#2196F3"],
+                      }),
+                    }}
+                  >
+                    <Animated.Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: bmiAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["#2c3e50", "#fff"],
+                        }),
+                      }}
+                    >
+                      BMI
+                    </Animated.Text>
+                  </Animated.View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setSuggestionsSection("heart")}
+                >
+                  <Animated.View
+                    style={{
+                      paddingVertical: 2,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                      backgroundColor: heartRAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["transparent", "#2196F3"],
+                      }),
+                    }}
+                  >
+                    <Animated.Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: heartRAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["#2c3e50", "#fff"],
+                        }),
+                      }}
+                    >
+                      Heart Rate
+                    </Animated.Text>
+                  </Animated.View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setSuggestionsSection("sleep")}
+                >
+                  <Animated.View
+                    style={{
+                      paddingVertical: 2,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                      backgroundColor: sleepAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["transparent", "#2196F3"],
+                      }),
+                    }}
+                  >
+                    <Animated.Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: sleepAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["#2c3e50", "#fff"],
+                        }),
+                      }}
+                    >
+                      Sleep
+                    </Animated.Text>
+                  </Animated.View>
+                </TouchableOpacity>
+              </View>
 
-              <Input
-                label="Systolic BP (mmHg)"
-                value={systolic}
-                onChange={setSystolic}
-              />
-              <Input
-                label="Diastolic BP (mmHg)"
-                value={diastolic}
-                onChange={setDiastolic}
-              />
-              <Input
-                label="Blood Sugar (mg/dL)"
-                value={sugar}
-                onChange={setSugar}
-              />
-              <Input label="Height (cm)" value={height} onChange={setHeight} />
-              <Input label="Weight (kg)" value={weight} onChange={setWeight} />
-              <Input
-                label="Heart Rate (bpm)"
-                value={heartRate}
-                onChange={setHeartRate}
-              />
-              <Input label="Sleep Hours" value={sleep} onChange={setSleep} />
+              <ScrollView style={styles.container}>
+                <Text style={styles.title}>Enter Your Health Data</Text>
+                {suggestionsSection === "blood" && (
+                  <>
+                    <Input
+                      label="Systolic BP (mmHg)"
+                      value={systolic}
+                      onChange={setSystolic}
+                    />
+                    <Input
+                      label="Diastolic BP (mmHg)"
+                      value={diastolic}
+                      onChange={setDiastolic}
+                    />
+                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    {suggestions.bloodPressure !== null && (
+                      <Card style={styles.card1}>
+                        <Card.Content>
+                          <Text>{suggestions.bloodPressure}</Text>
+                        </Card.Content>
+                      </Card>
+                    )}
+                  </>
+                )}
+                {suggestionsSection === "suger" && (
+                  <>
+                    <Input
+                      label="Blood Sugar (mg/dL)"
+                      value={sugar}
+                      onChange={setSugar}
+                    />
+                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    {suggestions.sugar !== null && (
+                      <Card style={styles.card1}>
+                        <Card.Content>
+                          <Text>{suggestions.sugar}</Text>
+                        </Card.Content>
+                      </Card>
+                    )}
+                  </>
+                )}
+                {suggestionsSection === "bmi" && (
+                  <>
+                    <Input
+                      label="Height (cm)"
+                      value={height}
+                      onChange={setHeight}
+                    />
+                    <Input
+                      label="Weight (kg)"
+                      value={weight}
+                      onChange={setWeight}
+                    />
 
-              {bmi && <Text style={styles.bmiText}>Calculated BMI: {bmi}</Text>}
+                    {bmi && (
+                      <Text style={styles.bmiText}>Calculated BMI: {bmi}</Text>
+                    )}
 
-              <Text style={styles.subTitle}>Personal Suggestions</Text>
-              {suggestions.map((s, index) => (
-                <Card key={index} style={styles.card1}>
-                  <Card.Content>
-                    <Text>{s}</Text>
-                  </Card.Content>
-                </Card>
-              ))}
-            </ScrollView>
+                    {/* separator */}
+                    <View
+                      style={{ height: 10, backgroundColor: "transparent" }}
+                    />
+
+                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    {suggestions.bmi !== null && (
+                      <Card style={styles.card1}>
+                        <Card.Content>
+                          <Text>{suggestions.bmi}</Text>
+                        </Card.Content>
+                      </Card>
+                    )}
+                  </>
+                )}
+                {suggestionsSection === "heart" && (
+                  <>
+                    <Input
+                      label="Heart Rate (bpm)"
+                      value={heartRate}
+                      onChange={setHeartRate}
+                    />
+                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+
+                    {suggestions.heartRate !== null && (
+                      <Card style={styles.card1}>
+                        <Card.Content>
+                          <Text>{suggestions.heartRate}</Text>
+                        </Card.Content>
+                      </Card>
+                    )}
+                  </>
+                )}
+                {suggestionsSection === "sleep" && (
+                  <>
+                    <Input
+                      label="Sleep Hours"
+                      value={sleep}
+                      onChange={setSleep}
+                    />
+                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    {suggestions.sleep !== null && (
+                      <Card style={styles.card1}>
+                        <Card.Content>
+                          <Text>{suggestions.sleep}</Text>
+                        </Card.Content>
+                      </Card>
+                    )}
+                  </>
+                )}
+              </ScrollView>
+            </View>
           )}
         </View>
       </SafeAreaView>
@@ -799,7 +1081,11 @@ const HealthAnalysis = () => {
   );
 };
 
-const Input: React.FC<{ label: string; value: string; onChange: (text: string) => void }> = ({ label, value, onChange }) => (
+const Input: React.FC<{
+  label: string;
+  value: string;
+  onChange: (text: string) => void;
+}> = ({ label, value, onChange }) => (
   <View style={styles.inputContainer}>
     <Text style={styles.label}>{label}</Text>
     <TextInput
@@ -820,7 +1106,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "transparent",
     flexDirection: "column",
-    marginBottom: 120,
+    height: "76%",
     padding: 10,
   },
   scrollContainer: {
