@@ -290,12 +290,23 @@ const HealthAnalysis = () => {
   if (systolic && diastolic) {
     const sys = parseInt(systolic);
     const dia = parseInt(diastolic);
-    if (sys > 130 || dia > 80)
+    if (sys >= 180 && dia >= 120)
       suggestions.bloodPressure =
-        "High BP. Reduce salt, exercise, monitor regularly.";
+        "HYPERTENSIVE CRISIS";
+    else if (sys >= 140 || dia >= 90)
+      suggestions.bloodPressure =
+        "HIGH BLOOD PRESSURE HYPERTENSION STAGE 2, consult your doctor.";
+    else if ((sys > 130 && sys < 139) || (dia > 80 && dia < 89))
+      suggestions.bloodPressure =
+        "HIGH BLOOD PRESSURE (HYPERTENSION) STAGE 1, consult your doctor.";
+    else if ((sys >= 120 && sys <= 129) && (dia < 80 && dia > 60))
+      suggestions.bloodPressure =
+        "ELEVATED BLOOD PRESSURE. Stay hydrated, consult doctor.";
+    else if ((sys < 120 && sys > 90) && (dia < 80 && dia > 60))
+      suggestions.bloodPressure = "Blood pressure is normal.";
     else if (sys < 90 || dia < 60)
       suggestions.bloodPressure = "Low BP. Stay hydrated, consult doctor.";
-    else suggestions.bloodPressure = "Blood pressure is normal.";
+    else suggestions.bloodPressure = "Error in BP values.";
   }
 
   // Sugar
@@ -978,11 +989,19 @@ const HealthAnalysis = () => {
                       value={diastolic}
                       onChange={setDiastolic}
                     />
-                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    <Text style={styles.subTitle}>Suggestions</Text>
                     {suggestions.bloodPressure !== null && (
                       <Card style={styles.card1}>
                         <Card.Content>
-                          <Text>{suggestions.bloodPressure}</Text>
+                          {suggestions.bloodPressure === "HYPERTENSIVE CRISIS" ? (
+                            <View style={{ backgroundColor: "transparent", margin: 0, padding: 0 }}>
+                            <Text style={{ color: "#ae0000", fontWeight: "bold", alignSelf: "center" }}>
+                              {suggestions.bloodPressure}
+                            </Text>
+                            </View>
+                          ) : (
+                            <Text>{suggestions.bloodPressure}</Text>
+                          )}
                         </Card.Content>
                       </Card>
                     )}
@@ -995,7 +1014,7 @@ const HealthAnalysis = () => {
                       value={sugar}
                       onChange={setSugar}
                     />
-                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    <Text style={styles.subTitle}>Suggestions</Text>
                     {suggestions.sugar !== null && (
                       <Card style={styles.card1}>
                         <Card.Content>
@@ -1027,7 +1046,7 @@ const HealthAnalysis = () => {
                       style={{ height: 10, backgroundColor: "transparent" }}
                     />
 
-                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    <Text style={styles.subTitle}>Suggestions</Text>
                     {suggestions.bmi !== null && (
                       <Card style={styles.card1}>
                         <Card.Content>
@@ -1044,7 +1063,7 @@ const HealthAnalysis = () => {
                       value={heartRate}
                       onChange={setHeartRate}
                     />
-                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    <Text style={styles.subTitle}>Suggestions</Text>
 
                     {suggestions.heartRate !== null && (
                       <Card style={styles.card1}>
@@ -1062,7 +1081,7 @@ const HealthAnalysis = () => {
                       value={sleep}
                       onChange={setSleep}
                     />
-                    <Text style={styles.subTitle}>Personal Suggestions</Text>
+                    <Text style={styles.subTitle}>Suggestions</Text>
                     {suggestions.sleep !== null && (
                       <Card style={styles.card1}>
                         <Card.Content>
@@ -1205,7 +1224,7 @@ const styles = StyleSheet.create({
   },
   card1: {
     marginBottom: 10,
-    backgroundColor: "#000",
+    backgroundColor: "rgb(70, 91, 209)",
     borderRadius: 10,
   },
 });
