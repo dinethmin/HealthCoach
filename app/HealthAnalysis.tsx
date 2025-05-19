@@ -17,6 +17,7 @@ import { BarChart } from "react-native-chart-kit";
 import { PieChart } from "react-native-chart-kit";
 import { LinearGradient } from "expo-linear-gradient";
 import { Card } from "react-native-paper";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const HealthAnalysis = () => {
   const [error, setError] = useState("");
@@ -290,63 +291,81 @@ const HealthAnalysis = () => {
   if (systolic && diastolic) {
     const sys = parseInt(systolic);
     const dia = parseInt(diastolic);
-    if (sys >= 180 && dia >= 120)
-      suggestions.bloodPressure =
-        "HYPERTENSIVE CRISIS";
-    else if (sys >= 140 || dia >= 90)
-      suggestions.bloodPressure =
-        "HIGH BLOOD PRESSURE HYPERTENSION STAGE 2, consult your doctor.";
-    else if ((sys > 130 && sys < 139) || (dia > 80 && dia < 89))
-      suggestions.bloodPressure =
-        "HIGH BLOOD PRESSURE (HYPERTENSION) STAGE 1, consult your doctor.";
-    else if ((sys >= 120 && sys <= 129) && (dia < 80 && dia > 60))
+    if (sys >= 180 && dia >= 120) {
+      suggestions.bloodPressure = "HYPERTENSIVE CRISIS";
+    } else if (sys >= 140 || dia >= 90) {
+      suggestions.bloodPressure = "HIGH BLOOD PRESSURE HYPERTENSION STAGE 2";
+    } else if ((sys >= 130 && sys <= 139) || (dia >= 80 && dia <= 89)) {
+      suggestions.bloodPressure = "HIGH BLOOD PRESSURE HYPERTENSION STAGE 1";
+    } else if (sys >= 120 && sys <= 129 && dia < 80 && dia > 60) {
       suggestions.bloodPressure =
         "ELEVATED BLOOD PRESSURE. Stay hydrated, consult doctor.";
-    else if ((sys < 120 && sys > 90) && (dia < 80 && dia > 60))
+    } else if (sys >= 90 && sys < 120 && dia <= 80 && dia > 60) {
       suggestions.bloodPressure = "Blood pressure is normal.";
-    else if (sys < 90 || dia < 60)
+    } else if (sys < 90 || dia < 60) {
       suggestions.bloodPressure = "Low BP. Stay hydrated, consult doctor.";
-    else suggestions.bloodPressure = "Error in BP values.";
+    } else {
+      suggestions.bloodPressure = "Error in BP values.";
+    }
   }
 
   // Sugar
   if (sugar) {
     const s = parseFloat(sugar);
-    if (s < 70)
-      suggestions.sugar = "Low sugar. Consider a snack and consult doctor.";
-    else if (s > 140)
-      suggestions.sugar = "High sugar. Reduce sugar intake and monitor.";
-    else suggestions.sugar = "Sugar level is normal.";
+    if (s < 70) {
+      suggestions.sugar =
+        "LOW BLOOD SUGAR. Eat something and consult your doctor.";
+    } else if (s >= 70 && s <= 99) {
+      suggestions.sugar = "Blood sugar is normal.";
+    } else if (s >= 100 && s <= 125) {
+      suggestions.sugar = "PREDIABETES Monitor and adjust lifestyle.";
+    } else if (s >= 126) {
+      suggestions.sugar = "HIGH BLOOD SUGAR";
+    } else {
+      suggestions.sugar = "Unable to evaluate sugar levels. Check input.";
+    }
   }
 
   // BMI
   if (bmi) {
-    if (bmi < 18.5)
+    if (bmi < 18.5) {
       suggestions.bmi = "Underweight. Balanced diet can help gain weight.";
-    else if (bmi >= 25)
+    } else if (bmi >= 25) {
       suggestions.bmi = "Overweight. Exercise and mindful eating suggested.";
-    else suggestions.bmi = "BMI is in a healthy range.";
+    } else {
+      suggestions.bmi = "BMI is in a healthy range.";
+    }
   }
 
   // Heart rate
   if (heartRate) {
     const hr = parseInt(heartRate);
-    if (hr < 60)
+    if (hr < 60) {
       suggestions.heartRate =
-        "Low heart rate. Normal for athletes, else check.";
-    else if (hr > 100)
+        "LOW HEART RATE. Normal for athletes, otherwise consult a doctor.";
+    } else if (hr >= 60 && hr <= 100) {
+      suggestions.heartRate = "Heart rate is NORMAL.";
+    } else if (hr > 100) {
       suggestions.heartRate =
-        "High heart rate. Try to relax, seek advice if needed.";
-    else suggestions.heartRate = "Heart rate is normal.";
+        "HIGH HEART RATE. Relax and consult a doctor if persistent.";
+    } else {
+      suggestions.heartRate = "Unable to evaluate heart rate. Check input.";
+    }
   }
 
   // Sleep
   if (sleep) {
     const sl = parseFloat(sleep);
-    if (sl < 6)
-      suggestions.sleep = "Low sleep. Aim for 7–9 hours to feel rested.";
-    else if (sl > 9) suggestions.sleep = "Too much sleep. Monitor for fatigue.";
-    else suggestions.sleep = "Sleep duration is healthy.";
+    if (sl < 6) {
+      suggestions.sleep = "INSUFFICIENT SLEEP. Aim for 7–9 hours nightly.";
+    } else if (sl >= 6 && sl <= 9) {
+      suggestions.sleep = "Sleep duration is HEALTHY.";
+    } else if (sl > 9) {
+      suggestions.sleep =
+        "EXCESSIVE SLEEP. Could be a sign of fatigue or other issues.";
+    } else {
+      suggestions.sleep = "Unable to evaluate sleep. Check input.";
+    }
   }
 
   return (
@@ -993,15 +1012,202 @@ const HealthAnalysis = () => {
                     {suggestions.bloodPressure !== null && (
                       <Card style={styles.card1}>
                         <Card.Content>
-                          {suggestions.bloodPressure === "HYPERTENSIVE CRISIS" ? (
-                            <View style={{ backgroundColor: "transparent", margin: 0, padding: 0 }}>
-                            <Text style={{ color: "#ae0000", fontWeight: "bold", alignSelf: "center" }}>
-                              {suggestions.bloodPressure}
-                            </Text>
+                          {suggestions.bloodPressure ===
+                          "HYPERTENSIVE CRISIS" ? (
+                            <View
+                              style={{
+                                backgroundColor: "transparent",
+                                margin: 0,
+                                padding: 0,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#ae0000",
+                                  fontWeight: "bold",
+                                  alignSelf: "center",
+                                  fontSize: 18,
+                                  paddingBottom: 10,
+                                }}
+                              >
+                                {suggestions.bloodPressure}
+                              </Text>
+                              <View
+                                style={{
+                                  padding: 5,
+                                  backgroundColor: "transparent",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    paddingBottom: 10,
+                                  }}
+                                >
+                                  <Entypo
+                                    name="dot-single"
+                                    size={20}
+                                    color="black"
+                                  />
+                                  Wait five minutes after your first reading.
+                                </Text>
+                                <Text
+                                  style={{
+                                    paddingBottom: 10,
+                                  }}
+                                >
+                                  <Entypo
+                                    name="dot-single"
+                                    size={20}
+                                    color="black"
+                                  />
+                                  Take your blood pressure again.
+                                </Text>
+                                <Text>
+                                  If your readings are still unusually high,{" "}
+                                  <Text
+                                    style={{
+                                      fontWeight: "bold",
+                                      color: "#af2727",
+                                    }}
+                                  >
+                                    contact your health care professional
+                                    immediately.
+                                  </Text>
+                                </Text>
+                              </View>
                             </View>
-                          ) : (
+                          ) : null}
+
+                          {suggestions.bloodPressure ===
+                          "HIGH BLOOD PRESSURE HYPERTENSION STAGE 2" ? (
+                            <View
+                              style={{
+                                backgroundColor: "transparent",
+                                margin: 0,
+                                padding: 0,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#ae0000",
+                                  fontWeight: "bold",
+                                  alignSelf: "center",
+                                  fontSize: 18,
+                                  paddingBottom: 10,
+                                }}
+                              >
+                                {suggestions.bloodPressure}
+                              </Text>
+                              <View
+                                style={{
+                                  padding: 5,
+                                  backgroundColor: "transparent",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    paddingBottom: 10,
+                                  }}
+                                >
+                                  <Entypo
+                                    name="dot-single"
+                                    size={20}
+                                    color="black"
+                                  />
+                                  You need medical attention,{" "}
+                                  <Text
+                                    style={{
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    contact your health care professional.
+                                  </Text>
+                                </Text>
+                                <Text style={{ textAlign: "justify" }}>
+                                  Your health care professional should prescribe
+                                  blood pressure medication and healthy
+                                  lifestyle changes.
+                                </Text>
+                              </View>
+                            </View>
+                          ) : null}
+
+                          {suggestions.bloodPressure ===
+                          "HIGH BLOOD PRESSURE HYPERTENSION STAGE 1" ? (
+                            <View
+                              style={{
+                                backgroundColor: "transparent",
+                                margin: 0,
+                                padding: 0,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#ae0000",
+                                  fontWeight: "bold",
+                                  alignSelf: "center",
+                                  fontSize: 18,
+                                  paddingBottom: 10,
+                                }}
+                              >
+                                {suggestions.bloodPressure}
+                              </Text>
+                              <View
+                                style={{
+                                  padding: 5,
+                                  backgroundColor: "transparent",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    paddingBottom: 10,
+                                  }}
+                                >
+                                  <Entypo
+                                    name="dot-single"
+                                    size={20}
+                                    color="black"
+                                  />
+                                  You need medical attention,{" "}
+                                  <Text
+                                    style={{
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    contact your health care professional.
+                                  </Text>
+                                </Text>
+                                <Text style={{ textAlign: "justify" }}>
+                                  your health care professional should prescribe
+                                  lifestyle changes. They may consider adding
+                                  medication based on your risk of heart disease
+                                  or stroke and should add medication if you
+                                  have other conditions such as diabetes, heart
+                                  failure and kidney disease.
+                                </Text>
+                              </View>
+                            </View>
+                          ) : null}
+
+                          {suggestions.bloodPressure ===
+                          "ELEVATED BLOOD PRESSURE. Stay hydrated, consult doctor." ? (
                             <Text>{suggestions.bloodPressure}</Text>
-                          )}
+                          ) : null}
+
+                          {suggestions.bloodPressure ===
+                          "Blood pressure is normal." ? (
+                            <Text>{suggestions.bloodPressure}</Text>
+                          ) : null}
+
+                          {suggestions.bloodPressure ===
+                          "Low BP. Stay hydrated, consult doctor." ? (
+                            <Text>{suggestions.bloodPressure}</Text>
+                          ) : null}
+
+                          {suggestions.bloodPressure ===
+                          "Error in BP values." ? (
+                            <Text>{suggestions.bloodPressure}</Text>
+                          ) : null}
                         </Card.Content>
                       </Card>
                     )}
@@ -1018,7 +1224,62 @@ const HealthAnalysis = () => {
                     {suggestions.sugar !== null && (
                       <Card style={styles.card1}>
                         <Card.Content>
-                          <Text>{suggestions.sugar}</Text>
+                          {suggestions.sugar === "HIGH BLOOD SUGAR" ? (
+                            <View
+                              style={{
+                                backgroundColor: "transparent",
+                                margin: 0,
+                                padding: 0,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: "#ae0000",
+                                  fontWeight: "bold",
+                                  alignSelf: "center",
+                                  fontSize: 18,
+                                  paddingBottom: 10,
+                                }}
+                              >
+                                {suggestions.sugar}
+                              </Text>
+                              <View
+                                style={{
+                                  padding: 5,
+                                  paddingLeft: 20,
+                                  backgroundColor: "transparent",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    paddingBottom: 10,
+                                  }}
+                                >
+                                  <Entypo
+                                    name="dot-single"
+                                    size={20}
+                                    color="black"
+                                  />
+                                  Possible diabetes
+                                </Text>
+                                <Text
+                                  style={{
+                                    paddingBottom: 10,
+                                  }}
+                                >
+                                  <Entypo
+                                    name="dot-single"
+                                    size={20}
+                                    color="black"
+                                  />
+                                  Seek medical advice.
+                                </Text>
+                              </View>
+                            </View>
+                          ) : (
+                            <Text>{suggestions.sugar}</Text>
+                          )}
                         </Card.Content>
                       </Card>
                     )}
