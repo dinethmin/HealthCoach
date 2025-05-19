@@ -156,7 +156,7 @@ const Signin = () => {
               onChangeText={setGender}
             />
             {gender &&
-              !["Male", "Female", "Non-binary", "Other"].includes(gender) && (
+              !["Male", "Female", "Other"].includes(gender) && (
                 <Text style={styles.errorText}>
                   Please enter a valid gender.
                 </Text>

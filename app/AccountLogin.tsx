@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Button,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React from "react";
 import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
@@ -68,7 +69,25 @@ const AccountLogin = () => {
         </Text>
       </View>
       <View style={{ height: "40%" }} />
-      <TouchableOpacity style={styles.btn} onPress={handleDeleteAccount}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() =>
+          Alert.alert(
+            "Delete Account",
+            "Are you sure you want to delete your account? This action cannot be undone.",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: handleDeleteAccount,
+              },
+            ]
+          )
+        }
+      >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <AntDesign name="deleteuser" size={22} color="white" />
           <Text style={styles.btnColor}>Delete My Account</Text>
