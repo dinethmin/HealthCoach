@@ -13,7 +13,7 @@ from firebase_admin import credentials, storage
 if not firebase_admin._apps:
     cred = credentials.ApplicationDefault() 
     firebase_admin.initialize_app(cred, {
-        'storageBucket': 'healthcoach-64321.firebasestorage.app' 
+        'storageBucket': '' 
     })
 
 # Download model from Firebase Storage
