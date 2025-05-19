@@ -5,26 +5,57 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
+import { FIREBASE_AUTH, FIREBASE_Database } from "@/FirebaseConfig";
+import { child, get, ref } from "firebase/database";
 
 const dummyChats = [
   {
     id: "user1_doctor1",
     participants: { user1: true, doctor1: true },
+    name: { user: "User 1", doctor: "Doctor 1" },
     lastMessage: "See you next week!",
     lastUpdated: 1683312331233,
   },
   {
     id: "user1_doctor2",
     participants: { user1: true, doctor2: true },
+    name: { user: "User 2", doctor: "Doctor 2" },
     lastMessage: "Thanks for the advice!",
     lastUpdated: 1683322331233,
   },
 ];
 
 const Chat = () => {
+  const [doctor, setDoctor] = useState(false);
+
+  const fetchUserData = async () => {
+    try {
+      const user = FIREBASE_AUTH.currentUser;
+      if (!user) {
+        console.warn("No user logged in");
+        return;
+      }
+
+      const userId = FIREBASE_AUTH.currentUser?.uid;
+      const dbRef = ref(FIREBASE_Database);
+
+      const snapshot2 = await get(child(dbRef, `doctor/${userId}`));
+
+      if (snapshot2.exists()) {
+        setDoctor(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <LinearGradient
       colors={["#e1ecf1", "#d2ebf7", "#d9eef9", "#e0f1f9", "#e6f2f8"]}
@@ -34,25 +65,28 @@ const Chat = () => {
       style={{ flex: 1 }}
     >
       <SafeAreaView style={styles.container}>
-      <View>
-        {dummyChats.map((chat) => (
-          
-          <Link
-            key={chat.id}
-            href={{
-              pathname: "/CRoom",
-              params: {
-                chatId: chat.id,
-              },
-            }}
-            asChild
-          >
-            <TouchableOpacity style={styles.chatCard}>
-              <Text style={styles.chatTitle}>{chat.id}</Text>
-              <Text style={styles.chatLastMessage}>{chat.lastMessage}</Text>
-            </TouchableOpacity>
-          </Link>
-        ))}
+        <View>
+          {dummyChats.map((chat) => (
+            <Link
+              key={chat.id}
+              href={{
+                pathname: "/CRoom",
+                params: {
+                  chatId: chat.id,
+                },
+              }}
+              asChild
+            >
+              <TouchableOpacity style={styles.chatCard}>
+                {doctor ? (
+                  <Text style={styles.chatTitle}>{chat.name.user}</Text>
+                ) : (
+                  <Text style={styles.chatTitle}>{chat.name.doctor}</Text>
+                )}
+                <Text style={styles.chatLastMessage}>{chat.lastMessage}</Text>
+              </TouchableOpacity>
+            </Link>
+          ))}
         </View>
       </SafeAreaView>
     </LinearGradient>
