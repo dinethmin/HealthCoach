@@ -10,9 +10,9 @@ app = Flask(__name__)
 
 # Initialize Firebase
 if not firebase_admin._apps:
-    cred = credentials.Certificate("healthcoach-64321-241714836832.json")
+    cred = credentials.Certificate("")
     initialize_app(cred, {
-        'storageBucket': "healthcoach-64321.firebasestorage.app"
+        'storageBucket': ""
     })
 
 def download_model(model_path, local_path):
