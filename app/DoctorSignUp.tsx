@@ -147,13 +147,13 @@ const DoctorSignUp = () => {
           )}
           <TextInput
             autoCapitalize="words"
-            placeholder="Gender (Male, Female, Non-binary)"
+            placeholder="Gender (Male, Female)"
             style={styles.inputField}
             value={gender}
             onChangeText={setGender}
           />
           {gender &&
-            !["Male", "Female", "Non-binary", "Other"].includes(gender) && (
+            !["Male", "Female", "Other"].includes(gender) && (
               <Text style={styles.errorText}>Please enter a valid gender.</Text>
             )}
           <TextInput
